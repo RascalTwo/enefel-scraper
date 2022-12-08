@@ -1,7 +1,11 @@
 import axios from "axios";
 import { base, teamsUrl } from "./consts.js";
-import { Team } from "./types.js";
-import { rosterScraper, scheduleScraper } from "./scrapers.js";
+import { RosterPlayer, ScheduleGame, Team } from "./types.js";
+import {
+  playerStatsScraper,
+  rosterScraper,
+  scheduleScraper,
+} from "./scrapers.js";
 
 export const getData = async (url: string): Promise<string> => {
   try {
@@ -25,7 +29,9 @@ export const getSchedules = async (arr: Team[]) => {
   return teamSchedules;
 };
 
-export const getRoster = async (arr: Team[]) => {
+export const getRoster = async (
+  arr: (Team & { schedule: ScheduleGame[] })[]
+) => {
   const teamRoster = await Promise.all(
     arr.slice(0, 2).map(async (d) => {
       const scheduleSlug = d.urlSlug.replace("/nfl/team/", "/roster/");
@@ -35,4 +41,21 @@ export const getRoster = async (arr: Team[]) => {
     })
   );
   return teamRoster;
+};
+
+export const getPlayerStats = async (
+  teams: (Team & { schedule: ScheduleGame[]; roster: RosterPlayer[] })[]
+) => {
+  const teamWithPlayerStats = await Promise.all(
+    teams.slice(0, 2).map((d) => {
+      const withStats = d.roster.slice(0, 2).map(async (p) => {
+        const statsSlug = p.statsUrl;
+        const html = await getData(`${statsSlug}`);
+        const stats = playerStatsScraper(html);
+        return { ...p, stats };
+      });
+      return { ...d, roster: withStats };
+    })
+  );
+  return teamWithPlayerStats;
 };

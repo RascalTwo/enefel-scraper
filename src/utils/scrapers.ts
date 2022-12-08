@@ -28,7 +28,7 @@ export const teamScraper = (html: string) => {
           ?.getAttribute("title")
           ?.split(" ")
           .slice(-1)[0];
-        const teamIcon = teamImgEl?.getAttribute("src");
+        const teamIcon = teamImgEl?.getAttribute("src")?.toString();
         teams.push({
           teamName,
           teamIcon,
@@ -253,4 +253,6 @@ const getSTPlayers = (document: Document, teamRoster: RosterPlayer[]) => {
 
 export const playerStatsScraper = (html: string) => {
   const document = getDocument(html);
+
+  return {};
 };
