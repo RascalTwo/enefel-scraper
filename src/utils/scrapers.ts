@@ -1,5 +1,5 @@
 import { JSDOM } from "jsdom";
-import { Roster, RosterPlayer, Schedule, ScheduleGame, Team } from "./types.js";
+import { RosterPlayer, ScheduleGame, Team } from "./types.js";
 
 const getDocument = (html: string) => {
   const dom = new JSDOM(html);
@@ -120,7 +120,7 @@ export const rosterScraper = (html: string) => {
   const document = getDocument(html);
   const tBody = document.querySelector("tbody");
   const tRows = tBody?.querySelectorAll("tr");
-  const teamRoster: Roster = [];
+  const teamRoster: RosterPlayer[] = [];
   tRows?.forEach((row) => {
     const playerImage = row
       .querySelector("td > div.headshot img")
@@ -129,6 +129,7 @@ export const rosterScraper = (html: string) => {
     const playerNumber = row.querySelector(
       "td + td > div a + span"
     )?.textContent;
+    const statsUrl = row.querySelector("td + td > div a")?.getAttribute("href");
     const playerPosition = row.querySelector("td + td + td > div")?.textContent;
     const playerAge = row.querySelector("td + td + td + td > div")?.textContent;
     const playerHeight = row.querySelector(
@@ -144,6 +145,7 @@ export const rosterScraper = (html: string) => {
       "td + td + td + td + td + td + td + td > div"
     )?.textContent;
     teamRoster.push({
+      statsUrl: statsUrl?.replace("/player/", "/player/stats/"),
       headshot: playerImage,
       name: playerName,
       number: playerNumber,
@@ -156,4 +158,8 @@ export const rosterScraper = (html: string) => {
     } as RosterPlayer);
   });
   return teamRoster;
+};
+
+export const playerStatsScraper = (html: string) => {
+  const document = getDocument(html);
 };

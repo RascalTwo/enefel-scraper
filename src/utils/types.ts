@@ -6,7 +6,6 @@ export type Team = {
   conference: "AFC" | "NFC";
   division: "north" | "south" | "east" | "west";
 };
-export type Schedule = ScheduleGame[];
 export type ScheduleGame = {
   gameUrl: string | null;
   date: string;
@@ -19,8 +18,8 @@ type ScheduleStat = {
   player: string;
   yards: number;
 };
-export type Roster = RosterPlayer[];
 export type RosterPlayer = {
+  statsUrl: string;
   headshot: string;
   name: string;
   number: string;
