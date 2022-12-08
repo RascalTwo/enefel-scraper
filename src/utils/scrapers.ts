@@ -251,6 +251,6 @@ const getSTPlayers = (document: Document, teamRoster: RosterPlayer[]) => {
   });
 };
 
-// export const playerStatsScraper = (html: string) => {
-//   const document = getDocument(html);
-// });
+export const playerStatsScraper = (html: string) => {
+  const document = getDocument(html);
+};
