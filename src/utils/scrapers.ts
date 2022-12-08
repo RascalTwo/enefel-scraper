@@ -118,9 +118,16 @@ const formatScheduleRowData = (row: HTMLTableRowElement) => {
 
 export const rosterScraper = (html: string) => {
   const document = getDocument(html);
-  const tBody = document.querySelector("tbody");
-  const tRows = tBody?.querySelectorAll("tr");
   const teamRoster: RosterPlayer[] = [];
+  getOffensePlayers(document, teamRoster);
+  getDefensePlayers(document, teamRoster);
+  getSTPlayers(document, teamRoster);
+  return teamRoster;
+};
+
+const getOffensePlayers = (document: Document, teamRoster: RosterPlayer[]) => {
+  const tBody = document.querySelector(".Offense tbody");
+  const tRows = tBody?.querySelectorAll("tr");
   tRows?.forEach((row) => {
     const playerImage = row
       .querySelector("td div.headshot img")
@@ -147,6 +154,7 @@ export const rosterScraper = (html: string) => {
     teamRoster.push({
       statsUrl: statsUrl?.replace("/player/", "/player/stats/"),
       headshot: playerImage,
+      lineup: "Offense",
       name: playerName,
       number: playerNumber,
       position: playerPosition,
@@ -157,9 +165,92 @@ export const rosterScraper = (html: string) => {
       college: playerCollege,
     } as RosterPlayer);
   });
-  return teamRoster;
 };
 
-export const playerStatsScraper = (html: string) => {
-  const document = getDocument(html);
+const getDefensePlayers = (document: Document, teamRoster: RosterPlayer[]) => {
+  const tBody = document.querySelector(".Defense tbody");
+  const tRows = tBody?.querySelectorAll("tr");
+  tRows?.forEach((row) => {
+    const playerImage = row
+      .querySelector("td div.headshot img")
+      ?.getAttribute("alt");
+    const playerName = row.querySelector("td + td > div > a")?.textContent;
+    const playerNumber = row.querySelector(
+      "td + td > div a + span"
+    )?.textContent;
+    const statsUrl = row.querySelector("td + td > div a")?.getAttribute("href");
+    const playerPosition = row.querySelector("td + td + td > div")?.textContent;
+    const playerAge = row.querySelector("td + td + td + td > div")?.textContent;
+    const playerHeight = row.querySelector(
+      "td + td + td + td + td > div"
+    )?.textContent;
+    const playerWeight = row.querySelector(
+      "td + td + td + td + td + td > div"
+    )?.textContent;
+    const playerExp = row.querySelector(
+      "td + td + td + td + td + td + td > div"
+    )?.textContent;
+    const playerCollege = row.querySelector(
+      "td + td + td + td + td + td + td + td > div"
+    )?.textContent;
+    teamRoster.push({
+      statsUrl: statsUrl?.replace("/player/", "/player/stats/"),
+      headshot: playerImage,
+      lineup: "Defense",
+      name: playerName,
+      number: playerNumber,
+      position: playerPosition,
+      age: playerAge,
+      height: playerHeight,
+      weight: playerWeight,
+      experience: playerExp,
+      college: playerCollege,
+    } as RosterPlayer);
+  });
 };
+
+const getSTPlayers = (document: Document, teamRoster: RosterPlayer[]) => {
+  const tBody = document.querySelector(".Special.Teams tbody");
+  const tRows = tBody?.querySelectorAll("tr");
+  tRows?.forEach((row) => {
+    const playerImage = row
+      .querySelector("td div.headshot img")
+      ?.getAttribute("alt");
+    const playerName = row.querySelector("td + td > div > a")?.textContent;
+    const playerNumber = row.querySelector(
+      "td + td > div a + span"
+    )?.textContent;
+    const statsUrl = row.querySelector("td + td > div a")?.getAttribute("href");
+    const playerPosition = row.querySelector("td + td + td > div")?.textContent;
+    const playerAge = row.querySelector("td + td + td + td > div")?.textContent;
+    const playerHeight = row.querySelector(
+      "td + td + td + td + td > div"
+    )?.textContent;
+    const playerWeight = row.querySelector(
+      "td + td + td + td + td + td > div"
+    )?.textContent;
+    const playerExp = row.querySelector(
+      "td + td + td + td + td + td + td > div"
+    )?.textContent;
+    const playerCollege = row.querySelector(
+      "td + td + td + td + td + td + td + td > div"
+    )?.textContent;
+    teamRoster.push({
+      statsUrl: statsUrl?.replace("/player/", "/player/stats/"),
+      headshot: playerImage,
+      lineup: "Special Teams",
+      name: playerName,
+      number: playerNumber,
+      position: playerPosition,
+      age: playerAge,
+      height: playerHeight,
+      weight: playerWeight,
+      experience: playerExp,
+      college: playerCollege,
+    } as RosterPlayer);
+  });
+};
+
+// export const playerStatsScraper = (html: string) => {
+//   const document = getDocument(html);
+// });

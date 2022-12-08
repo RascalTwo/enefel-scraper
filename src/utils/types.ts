@@ -21,6 +21,7 @@ type ScheduleStat = {
 export type RosterPlayer = {
   statsUrl: string;
   headshot: string;
+  lineup: "Offense" | "Defense" | "Special Teams" | string | null;
   name: string;
   number: string;
   position: string;
