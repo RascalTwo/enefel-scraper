@@ -123,8 +123,8 @@ export const rosterScraper = (html: string) => {
   const teamRoster: RosterPlayer[] = [];
   tRows?.forEach((row) => {
     const playerImage = row
-      .querySelector("td > div.headshot img")
-      ?.getAttribute("src");
+      .querySelector("td div.headshot img")
+      ?.getAttribute("alt");
     const playerName = row.querySelector("td + td > div > a")?.textContent;
     const playerNumber = row.querySelector(
       "td + td > div a + span"
