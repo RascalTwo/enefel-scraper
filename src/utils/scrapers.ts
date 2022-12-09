@@ -28,7 +28,13 @@ export const teamScraper = (html: string) => {
           ?.getAttribute("title")
           ?.split(" ")
           .slice(-1)[0];
-        const teamIcon = teamImgEl?.getAttribute("src")?.toString();
+        const teamSlug = t
+          .querySelector("div > a > h2")
+          ?.parentElement?.getAttribute("href")
+          ?.split("/")
+          .slice(-2)[0];
+
+        const teamIcon = `https://a.espncdn.com/combiner/i?img=/i/teamlogos/nfl/500/${teamSlug}.png`;
         teams.push({
           teamName,
           teamIcon,
