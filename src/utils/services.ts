@@ -33,7 +33,7 @@ export const getRoster = async (
   arr: (Team & { schedule: ScheduleGame[] })[]
 ) => {
   const teamRoster = await Promise.all(
-    arr.slice(0, 2).map(async (d) => {
+    arr.map(async (d) => {
       const scheduleSlug = d.urlSlug.replace("/nfl/team/", "/roster/");
       const html = await getData(`${base}/nfl/team${scheduleSlug}`);
       const roster = rosterScraper(html);
@@ -47,13 +47,15 @@ export const getPlayerStats = async (
   teams: (Team & { schedule: ScheduleGame[]; roster: RosterPlayer[] })[]
 ) => {
   const teamWithPlayerStats = await Promise.all(
-    teams.slice(0, 2).map((d) => {
-      const withStats = d.roster.slice(0, 2).map(async (p) => {
-        const statsSlug = p.statsUrl;
-        const html = await getData(`${statsSlug}`);
-        const stats = playerStatsScraper(html);
-        return { ...p, stats };
-      });
+    teams.map(async (d) => {
+      const withStats = await Promise.all(
+        d.roster.slice(0, 2).map(async (p) => {
+          const statsSlug = p.statsUrl;
+          const html = await getData(`${statsSlug}`);
+          const stats = playerStatsScraper(html);
+          return { ...p, stats };
+        })
+      );
       return { ...d, roster: withStats };
     })
   );

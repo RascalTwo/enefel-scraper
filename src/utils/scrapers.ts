@@ -255,6 +255,56 @@ const getSTPlayers = (document: Document, teamRoster: RosterPlayer[]) => {
 
 export const playerStatsScraper = (html: string) => {
   const document = getDocument(html);
+  const tables: any[] = [];
 
-  return {};
+  const tableEls = document.querySelectorAll("div.Table__Title");
+  tableEls.forEach((table) => {
+    const tableTitle = table.textContent;
+    const tableContainer = table.parentElement;
+
+    const categoryTableTitleEl = tableContainer?.querySelectorAll(
+      "div + div > table thead > tr > th"
+    );
+    const colTitles: (string | null)[] = [];
+    categoryTableTitleEl?.forEach((el) => colTitles.push(el.textContent));
+
+    const tRows = tableContainer?.querySelectorAll("tbody.Table__TBODY > tr");
+    const rowTitles: { year: string | null; team: string | undefined }[] = [];
+    const rowStats: (string | null)[] = [];
+    tRows?.forEach((row, i) => {
+      if (i + 1 > tRows.length / 2) {
+        row.querySelectorAll("td").forEach((td) => {
+          rowStats.push(td.textContent);
+        });
+      } else {
+        const [year, team] = row.querySelectorAll("td");
+        rowTitles.push({
+          year: year.textContent,
+          team: team
+            .querySelector("div > img + a")
+            ?.getAttribute("href")
+            ?.split("/")
+            .slice(-1)[0],
+        });
+      }
+    });
+    const cols = colTitles.slice(2, -1);
+    const rowData = rowTitles.map((rt, i) => {
+      return {
+        ...rt,
+        stats: rowStats
+          .slice((cols.length + 1) * i, cols.length + 1)
+          .map((r, idx) => {
+            return { title: cols[idx], stat: r };
+          }),
+      };
+    });
+
+    tables.push({
+      category: tableTitle,
+      colTitles,
+      seasons: rowData,
+    });
+  });
+  return tables;
 };
