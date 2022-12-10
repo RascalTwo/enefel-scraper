@@ -31,3 +31,16 @@ export type RosterPlayer = {
   experience: string;
   college: string | null;
 };
+export type Category = {
+  category: string | null;
+  seasons: Season[];
+};
+export type Season = {
+  season: string | null;
+  team: string | null;
+  stats: Stat[];
+};
+export type Stat = {
+  title: string | null;
+  stat: string | null;
+};

@@ -1,8 +1,12 @@
-import { throws } from "assert";
-import { table } from "console";
-import e from "express";
 import { JSDOM } from "jsdom";
-import { RosterPlayer, ScheduleGame, Team } from "./types.js";
+import {
+  Category,
+  RosterPlayer,
+  ScheduleGame,
+  Season,
+  Stat,
+  Team,
+} from "./types.js";
 
 const getDocument = (html: string) => {
   const dom = new JSDOM(html);
@@ -259,24 +263,24 @@ const getSTPlayers = (document: Document, teamRoster: RosterPlayer[]) => {
 export const playerStatsScraper = (html: string) => {
   const document = getDocument(html);
   const playerStatus = document.querySelector("span.TextStatus")?.textContent;
-  const categories: any[] = [];
+  const categories: Category[] = [];
   const tableEls = document.querySelectorAll(
     "div.ResponsiveTable > div.Table__Title"
   );
   tableEls.forEach((cat) => {
-    const seasons: any[] = [];
+    const seasons: Season[] = [];
 
     const category = cat.textContent;
     const catContainer = cat.parentElement;
 
-    const tData: any[] = [];
+    const tData: (string | null)[] = [];
     catContainer?.querySelectorAll("thead > tr > th").forEach((th, idx) => {
       tData.push(th.textContent);
     });
 
     const tRows = catContainer?.querySelectorAll("tbody > tr[data-idx]");
     tRows?.forEach((row, idx) => {
-      const rd: any[] = [];
+      const rd: (string | null)[] = [];
       const rowdata = catContainer?.querySelectorAll(
         `tbody > tr[data-idx="${idx}"] > td`
       );
@@ -295,5 +299,9 @@ export const playerStatsScraper = (html: string) => {
       seasons: seasons,
     });
   });
-  return { status: playerStatus, categories };
+  try {
+    return { status: playerStatus, categories };
+  } catch (err) {
+    return { status: playerStatus, categories: null };
+  }
 };

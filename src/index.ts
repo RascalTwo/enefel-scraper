@@ -14,9 +14,10 @@ const port = 5000;
 app.get("/", async (req: Request, res: Response) => {
   const teamsHTML = await getData(teamsUrl);
   const teamData = teamScraper(teamsHTML);
-  const schedules = await getSchedules(teamData);
+  const schedules = await getSchedules(teamData.slice(0, 7));
   const roster = await getRoster(schedules);
   const playerStats = await getPlayerStats(roster);
+  console.log("🌟 success!!!!");
   res.json(playerStats);
 });
 
