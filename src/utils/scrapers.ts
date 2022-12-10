@@ -1,5 +1,6 @@
 import { throws } from "assert";
 import { table } from "console";
+import e from "express";
 import { JSDOM } from "jsdom";
 import { RosterPlayer, ScheduleGame, Team } from "./types.js";
 
@@ -262,24 +263,36 @@ export const playerStatsScraper = (html: string) => {
   const tableEls = document.querySelectorAll(
     "div.ResponsiveTable > div.Table__Title"
   );
-  tableEls.forEach((cat, i) => {
+  tableEls.forEach((cat) => {
     const seasons: any[] = [];
+
     const category = cat.textContent;
-    const tableHeaders = cat.parentElement?.querySelectorAll("thead > tr > th");
-    tableHeaders?.forEach((th, i) => {
-      const data = cat.parentElement?.querySelectorAll("tbody > tr > td");
-      const dataArr: any[] = [];
-      data?.forEach((td) => {
-        dataArr.push(td.textContent);
-      });
+    const catContainer = cat.parentElement;
+
+    const tData: any[] = [];
+    catContainer?.querySelectorAll("thead > tr > th").forEach((th, idx) => {
+      tData.push(th.textContent);
+    });
+
+    const tRows = catContainer?.querySelectorAll("tbody > tr[data-idx]");
+    tRows?.forEach((row, idx) => {
+      const rd: any[] = [];
+      const rowdata = catContainer?.querySelectorAll(
+        `tbody > tr[data-idx="${idx}"] > td`
+      );
+      rowdata?.forEach((td) => rd.push(td.textContent));
+
       seasons.push({
-        season: th.textContent,
-        dataArr: tableHeaders.length,
+        season: rd[0],
+        team: rd[1],
+        stats: rd
+          .slice(2)
+          .map((r, i) => ({ title: tData.slice(2)[i], stat: r })),
       });
     });
     categories.push({
       category,
-      seasons,
+      seasons: seasons,
     });
   });
   return { status: playerStatus, categories };
