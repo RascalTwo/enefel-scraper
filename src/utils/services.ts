@@ -53,7 +53,11 @@ export const getPlayerStats = async (
           const statsSlug = p.statsUrl;
           const html = await getData(`${statsSlug}`);
           const stats = playerStatsScraper(html);
-          return { ...p, stats };
+          return {
+            ...p,
+            status: stats.status ? stats.status : "Inactive",
+            stats: stats.categories,
+          };
         })
       );
       return { ...d, roster: withStats };
