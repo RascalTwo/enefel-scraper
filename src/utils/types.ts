@@ -14,10 +14,6 @@ export type ScheduleGame = {
   outcome: string | null;
   score: string | null;
 };
-type ScheduleStat = {
-  player: string;
-  yards: number;
-};
 export type RosterPlayer = {
   statsUrl: string;
   headshot: string;

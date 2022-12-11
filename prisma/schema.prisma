@@ -1,0 +1,94 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// CockroachDB connection
+
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// generator client {
+//   provider = "prisma-client-js"
+// }
+
+// datasource db {
+//   provider = "cockroachdb"
+//   url      = env("DATABASE_URL")
+// }
+
+// model Widget {
+//   id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+// }
+
+model Team {
+  id         String         @id @default(uuid())
+  teamName   String
+  teamIcon   String
+  teamCity   String
+  conference String
+  division   String
+  urlSlug    String
+  schedule   ScheduleGame[]
+  roster     Player[]
+}
+
+model ScheduleGame {
+  id         String @id @default(uuid())
+  gameUrl    String
+  date       String
+  opponent   String // Team relation
+  homeOrAway String
+  outcome    String
+  score      String
+  team       Team   @relation(fields: [team_id], references: [id])
+  team_id    String
+}
+
+model Player {
+  id         String     @id @default(uuid())
+  statsUrl   String
+  headshot   String
+  lineup     String
+  name       String
+  number     String
+  position   String
+  age        String
+  height     String
+  weight     String
+  experience String
+  college    String
+  status     String
+  stats      Category[]
+  team       Team       @relation(fields: [team_id], references: [id])
+  team_id    String
+}
+
+model Category {
+  id        String   @id @default(uuid())
+  category  String
+  seasons   Season[]
+  player    Player   @relation(fields: [player_id], references: [id])
+  player_id String
+}
+
+model Season {
+  id          String   @id @default(uuid())
+  season      String
+  team        String // connect?
+  stats       Stat[]
+  category    Category @relation(fields: [category_id], references: [id])
+  category_id String
+}
+
+model Stat {
+  id        String @id @default(uuid())
+  title     String
+  stat      String
+  season    Season @relation(fields: [season_id], references: [id])
+  season_id String
+}

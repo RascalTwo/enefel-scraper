@@ -1,12 +1,12 @@
-import { teamsUrl } from "./utils/consts.js";
-import { teamScraper } from "./utils/scrapers.js";
+import { teamsUrl } from "../utils/consts.js";
+import { teamScraper } from "../utils/scrapers.js";
 import {
   getData,
   getPlayerStats,
   getRoster,
   getSchedules,
-} from "./utils/services.js";
-import { logger } from "./utils/logger.js";
+} from "../utils/services.js";
+import { logger } from "../utils/logger.js";
 
 const getNFL = async () => {
   logger.start();
@@ -25,12 +25,13 @@ const getNFL = async () => {
   const roster = await getRoster(schedules);
   if (roster) {
     logger.success("roster");
+    logger.base(roster);
   }
-  const playerStats = await getPlayerStats(roster);
-  if (playerStats) {
-    logger.success("playerStats");
-  }
-  logger.success("scrape");
-  logger.base(playerStats);
+  //   const playerStats = await getPlayerStats(roster);
+  //   if (playerStats) {
+  //     logger.success("playerStats");
+  //   }
+  logger.base("🚀 scrape complete");
+  //   logger.base(playerStats);
 };
-// getNFL();
+getNFL();
