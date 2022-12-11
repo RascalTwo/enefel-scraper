@@ -55,7 +55,7 @@ model Player {
   headshot   String
   lineup     String?
   name       String
-  number     String
+  number     String?
   position   String
   age        String
   height     String
