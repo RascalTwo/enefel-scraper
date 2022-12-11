@@ -1,11 +1,11 @@
-import { teamsUrl } from "./consts.js";
-import { teamScraper } from "./scrapers.js";
+import { teamsUrl } from "./utils/consts.js";
+import { teamScraper } from "./utils/scrapers.js";
 import {
   getData,
   getPlayerStats,
   getRoster,
   getSchedules,
-} from "./services.js";
+} from "./utils/services.js";
 
 export const logger = {
   base: (text: string | any) => console.log(text),
@@ -27,7 +27,7 @@ const getNFL = async () => {
   if (teamData) {
     logger.success("teamData");
   }
-  const schedules = await getSchedules(teamData.slice(0, 10));
+  const schedules = await getSchedules(teamData.slice(0, 3));
   if (schedules) {
     logger.success("schedules");
   }

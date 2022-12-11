@@ -9,7 +9,7 @@
     "build": "rm -rf dist && tsc",
     "start": "npm run build && node dist/index.js",
     "lint": "npx eslint . --ext .ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "nodemon src/test.ts"
   },
   "keywords": [],
   "author": "",

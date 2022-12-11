@@ -9,7 +9,7 @@ import {
   rosterScraper,
   scheduleScraper,
 } from "./scrapers.js";
-import { logger } from "./test.js";
+import { logger } from "../test.js";
 
 export const getData = async (url: string): Promise<string> => {
   try {
@@ -66,7 +66,7 @@ export const getPlayerStats = async (
       await wait();
       logger.resumeLogger();
 
-      const withStats = Promise.all(
+      const withStats = await Promise.all(
         // remove this slice
         t.roster.map(async (p) => {
           logger.playerLogger(p.name);
