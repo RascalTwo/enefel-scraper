@@ -70,7 +70,7 @@ model Player {
 
 model Category {
   id        String   @id @default(uuid())
-  category  String
+  category  String?
   seasons   Season[]
   player    Player   @relation(fields: [player_id], references: [id])
   player_id String
@@ -78,17 +78,17 @@ model Category {
 
 model Season {
   id          String   @id @default(uuid())
-  season      String
-  team        String // connect?
+  season      String?
+  team        String? // connect?
   stats       Stat[]
   category    Category @relation(fields: [category_id], references: [id])
   category_id String
 }
 
 model Stat {
-  id        String @id @default(uuid())
-  title     String
-  stat      String
-  season    Season @relation(fields: [season_id], references: [id])
+  id        String  @id @default(uuid())
+  title     String?
+  stat      String?
+  season    Season  @relation(fields: [season_id], references: [id])
   season_id String
 }

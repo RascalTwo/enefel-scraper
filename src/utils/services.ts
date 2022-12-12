@@ -1,7 +1,7 @@
 import axios from "axios";
 import fetch from "node-fetch";
 import { base, teamsUrl } from "./consts.js";
-import { RosterPlayer, ScheduleGame, Team } from "./types.js";
+import { RosterPlayer, ScheduleGame, Stat, Team } from "./types.js";
 import http from "http";
 import https from "https";
 import {
@@ -10,20 +10,22 @@ import {
   scheduleScraper,
 } from "./scrapers.js";
 import { logger } from "./logger.js";
+import prisma from "./db.js";
+import type { Category } from "./types.js";
+import { Player } from "@prisma/client";
 
 export const getData = async (url: string): Promise<string> => {
   try {
-    const res = await fetch(url, {
+    const { data } = await axios(url, {
       // httpAgent: new http.Agent({ keepAlive: true }),
       // httpsAgent: new https.Agent({ keepAlive: true }),
       headers: {
         "User-Agent": "Mozilla/5.0",
-        "content-type": "application/json",
       },
     });
     // const data = await res.json();
     // console.log("response,", data);
-    return await res.text();
+    return data;
   } catch (err) {
     console.log("error", err);
     return "error";
@@ -56,37 +58,33 @@ export const getRoster = async (
   return teamRoster;
 };
 
-export const getPlayerStats = async (
-  teams: (Team & { schedule: ScheduleGame[]; roster: RosterPlayer[] })[]
-) => {
-  const teamWithPlayerStats = await Promise.all(
-    teams.map(async (t) => {
-      logger.teamLogger(t.teamName);
-      await wait();
+export const getPlayerStats = async () => {
+  const roster = await prisma.player.findMany({
+    select: {
+      id: true,
+      statsUrl: true,
+      name: true,
+    },
+  });
+  const withStats = await Promise.all(
+    roster.map(async (p, i) => {
+      logger.playerLogger(`${p.name} ${i}`);
+      // await wait();
 
-      const withStats = await Promise.all(
-        // remove this slice
-        t.roster.map(async (p) => {
-          logger.playerLogger(p.name);
-          await wait();
-
-          const statsSlug = p.statsUrl;
-          const html = await getData(`${statsSlug}`);
-          const stats = playerStatsScraper(html as string);
-          return {
-            ...p,
-            status: stats.status ? stats.status : "Inactive",
-            stats: stats.categories,
-          };
-        })
-      );
-      return { ...t, roster: withStats };
+      const html = await getData(`${p.statsUrl}`);
+      const stats = playerStatsScraper(html as string);
+      return {
+        ...p,
+        status: stats.status ? stats.status : "Inactive",
+        stats: stats.categories,
+      };
     })
   );
-  return teamWithPlayerStats;
+  return withStats;
 };
-const wait = () => {
-  return new Promise((resolve) => {
-    setTimeout(resolve, 3000);
-  });
-};
+
+// const wait = () => {
+//   return new Promise((resolve) => {
+//     setTimeout(resolve, 3000);
+//   });
+// };

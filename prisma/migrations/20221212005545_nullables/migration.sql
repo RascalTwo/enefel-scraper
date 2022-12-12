@@ -1,0 +1,10 @@
+-- AlterTable
+ALTER TABLE "Category" ALTER COLUMN "category" DROP NOT NULL;
+
+-- AlterTable
+ALTER TABLE "Season" ALTER COLUMN "season" DROP NOT NULL,
+ALTER COLUMN "team" DROP NOT NULL;
+
+-- AlterTable
+ALTER TABLE "Stat" ALTER COLUMN "title" DROP NOT NULL,
+ALTER COLUMN "stat" DROP NOT NULL;

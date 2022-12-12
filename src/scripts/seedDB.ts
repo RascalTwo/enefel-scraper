@@ -8,7 +8,7 @@ import {
 } from "../utils/services.js";
 import { logger } from "../utils/logger.js";
 import prisma from "../utils/db.js";
-
+import { Player } from "@prisma/client";
 const getNFL = async () => {
   logger.start();
   const teamsHTML = await getData(teamsUrl);
@@ -26,12 +26,8 @@ const getNFL = async () => {
   const roster = await getRoster(schedules);
   if (roster) {
     logger.success("roster");
-    // logger.base(roster);
   }
-  //   const playerStats = await getPlayerStats(roster);
-  //   if (playerStats) {
-  //     logger.success("playerStats");
-  //   }
+
   logger.base("🚀 scrape complete");
   return roster;
   //   logger.base(playerStats);
@@ -70,7 +66,7 @@ const seedDB = async () => {
                   headshot: r.headshot as string,
                   lineup: r.lineup as string,
                   name: r.name as string,
-                  number: r.number as string,
+                  number: r.number,
                   position: r.position as string,
                   age: r.age as string,
                   height: r.height as string,
