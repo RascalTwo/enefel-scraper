@@ -50,7 +50,7 @@ model ScheduleGame {
 }
 
 model Player {
-  id         String     @id @default(uuid())
+  id         String  @id @default(uuid())
   statsUrl   String
   headshot   String
   lineup     String?
@@ -63,32 +63,18 @@ model Player {
   experience String
   college    String?
   status     String?
-  stats      Category[]
-  team       Team       @relation(fields: [team_id], references: [id])
+  stats      Stat[]
+  team       Team    @relation(fields: [team_id], references: [id])
   team_id    String
-}
-
-model Category {
-  id        String   @id @default(uuid())
-  category  String?
-  seasons   Season[]
-  player    Player   @relation(fields: [player_id], references: [id])
-  player_id String
-}
-
-model Season {
-  id          String   @id @default(uuid())
-  season      String?
-  team        String? // connect?
-  stats       Stat[]
-  category    Category @relation(fields: [category_id], references: [id])
-  category_id String
 }
 
 model Stat {
   id        String  @id @default(uuid())
+  season    String?
+  category  String?
+  team      String?
   title     String?
   stat      String?
-  season    Season  @relation(fields: [season_id], references: [id])
-  season_id String
+  player    Player  @relation(fields: [player_id], references: [id])
+  player_id String
 }

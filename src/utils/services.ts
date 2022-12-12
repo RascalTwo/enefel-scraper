@@ -11,8 +11,7 @@ import {
 } from "./scrapers.js";
 import { logger } from "./logger.js";
 import prisma from "./db.js";
-import type { Category } from "./types.js";
-import { Player } from "@prisma/client";
+import { seedStats } from "../scripts/seedPlayerStats.js";
 
 export const getData = async (url: string): Promise<string> => {
   try {
@@ -23,8 +22,6 @@ export const getData = async (url: string): Promise<string> => {
         "User-Agent": "Mozilla/5.0",
       },
     });
-    // const data = await res.json();
-    // console.log("response,", data);
     return data;
   } catch (err) {
     console.log("error", err);
@@ -59,28 +56,38 @@ export const getRoster = async (
 };
 
 export const getPlayerStats = async () => {
-  const roster = await prisma.player.findMany({
+  const teamRosterQueue = await prisma.team.findMany({
     select: {
       id: true,
-      statsUrl: true,
-      name: true,
+      roster: {
+        select: {
+          id: true,
+          statsUrl: true,
+          name: true,
+        },
+      },
     },
   });
-  const withStats = await Promise.all(
-    roster.map(async (p, i) => {
-      logger.playerLogger(`${p.name} ${i}`);
-      // await wait();
 
-      const html = await getData(`${p.statsUrl}`);
-      const stats = playerStatsScraper(html as string);
-      return {
-        ...p,
-        status: stats.status ? stats.status : "Inactive",
-        stats: stats.categories,
-      };
-    })
-  );
-  return withStats;
+  while (teamRosterQueue.length > 1) {
+    const seedTeam = teamRosterQueue.pop();
+    if (seedTeam) {
+      const withStats = await Promise.all(
+        seedTeam.roster.map(async (p, i) => {
+          logger.playerLogger(`${p.name} ${i}`);
+
+          const html = await getData(`${p.statsUrl}`);
+          const stats = playerStatsScraper(html as string);
+          return {
+            ...p,
+            status: stats.status ? stats.status : "Inactive",
+            stats: stats.categories,
+          };
+        })
+      );
+      seedStats(withStats);
+    }
+  }
 };
 
 // const wait = () => {
