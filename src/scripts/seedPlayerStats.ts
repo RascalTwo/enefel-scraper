@@ -59,4 +59,4 @@ export const seedStats = async (
     })
   );
 };
-getPlayerStats();
+// getPlayerStats();
