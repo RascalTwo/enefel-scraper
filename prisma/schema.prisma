@@ -27,14 +27,27 @@ datasource db {
 
 model Team {
   id         String         @id @default(uuid())
-  teamName   String
+  teamName   String         @unique
   teamIcon   String
   teamCity   String
   conference String
   division   String
   urlSlug    String
+  details    Details?
   schedule   ScheduleGame[]
   roster     Player[]
+}
+
+model Details {
+  id      String @id @default(uuid())
+  rank    String
+  wins    String
+  losses  String
+  ties    String
+  coach   String
+  stadium String
+  team    Team   @relation(fields: [team_id], references: [id])
+  team_id String @unique
 }
 
 model ScheduleGame {

@@ -1,2 +1,2 @@
-export const base = "https://www.espn.com";
-export const teamsUrl = `${base}/nfl/teams`;
+export const base = "https://www.nfl.com";
+export const teamsUrl = `${base}/teams`;

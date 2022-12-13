@@ -1,18 +1,20 @@
-export type Team = {
-  teamName: string;
-  urlSlug: string;
-  teamIcon: string;
-  teamCity: string;
+export type RawTeam = {
+  team: string;
+  profUrl: string;
+  city: string;
+  icon: string;
   conference: "AFC" | "NFC";
-  division: "north" | "south" | "east" | "west";
 };
 export type ScheduleGame = {
-  gameUrl: string | null;
   date: string;
-  opponent: string;
-  homeOrAway: string;
-  outcome: string | null;
-  score: string | null;
+  gameUrl: string;
+  status: string;
+  away: ScheduleTeam;
+  home: ScheduleTeam;
+};
+type ScheduleTeam = {
+  team: string;
+  score: string;
 };
 export type RosterPlayer = {
   statsUrl: string;

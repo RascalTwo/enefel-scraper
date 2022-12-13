@@ -10,7 +10,7 @@
     "start": "npm run build && node dist/index.js",
     "lint": "npx eslint . --ext .ts",
     "test": "npx ts-node src/test.ts",
-    "seed": "npx ts-node src/scripts/seedDB.ts",
+    "seed": "npx ts-node src/scripts/seedTeams.ts",
     "seedP": "npx ts-node src/scripts/seedPlayerStats.ts"
   },
   "keywords": [],

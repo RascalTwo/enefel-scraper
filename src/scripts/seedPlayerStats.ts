@@ -1,6 +1,6 @@
 import prisma from "../utils/db.js";
 import { logger } from "../utils/logger.js";
-import { getPlayerStats } from "../utils/services.js";
+// import { getPlayerStats } from "../utils/services.js";
 import { Category } from "../utils/types.js";
 
 export const seedStats = async (
