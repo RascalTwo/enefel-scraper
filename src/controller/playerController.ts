@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
 import prisma from "../utils/db.js";
+import { formatTeam } from "../utils/helpers.js";
 
-export const getPlayer = async (req: Request, res: Response) => {
+const getPlayers = async (req: Request, res: Response) => {
   const { team } = req.params;
-  const formatTeam = team.replace(team.charAt(0), team.charAt(0).toUpperCase());
   const players = await prisma.team.findFirst({
     where: {
-      teamName: formatTeam,
+      teamName: formatTeam(team),
     },
     include: {
       roster: {
@@ -16,5 +16,25 @@ export const getPlayer = async (req: Request, res: Response) => {
       },
     },
   });
-  res.json(players);
+  res.json({ players: players });
 };
+
+const getPlayer = async (req: Request, res: Response) => {
+  const { playerslug } = req.params;
+  const formatPlayer = playerslug
+    .split(" ")
+    .map((n) => formatTeam(n))
+    .join(" ");
+
+  const player = await prisma.player.findFirst({
+    where: {
+      name: formatPlayer,
+    },
+    include: {
+      team: true,
+      stats: true,
+    },
+  });
+  res.json({ player });
+};
+export { getPlayers, getPlayer };
