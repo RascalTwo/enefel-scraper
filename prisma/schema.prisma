@@ -83,14 +83,21 @@ model TeamFieldGoal {
   team_stat_id String   @unique
 }
 
+// fix this!!!
 model TeamOffense {
-  id            String   @id @default(uuid())
-  type          String // General Rushing Passing
-  total_yards   String
-  plays         String
-  average_yards String
-  team_stat     TeamStat @relation(fields: [team_stat_id], references: [id])
-  team_stat_id  String   @unique
+  id                    String   @id @default(uuid())
+  general_total_yards   String
+  general_plays         String
+  general_average_yards String
+  rushing_total_yards   String
+  rushing_plays         String
+  rushing_average_yards String
+  passing_completions   String
+  passing_attempts      String
+  passing_interceptions String
+  passing_average_yards String
+  team_stat             TeamStat @relation(fields: [team_stat_id], references: [id])
+  team_stat_id          String   @unique
 }
 
 model TeamFirstDown {

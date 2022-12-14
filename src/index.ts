@@ -12,10 +12,10 @@ const app = express();
 const port = 5000;
 
 // app.use("/", scheduleRouter);
-app.get("/", async (req, res) => {
-  const teams = await getTeamStats();
-  res.json({ teams });
-});
+// app.get("/", async (req, res) => {
+//   const teams = await getTeamStats();
+//   res.json({ teams });
+// });
 
 app.use("/teams", teamsRouter);
 
