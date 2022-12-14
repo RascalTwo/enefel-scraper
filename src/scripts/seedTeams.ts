@@ -18,7 +18,6 @@ const seedTeams = async () => {
           update: {
             details: {
               update: {
-                // rank: team.details.rank as string,
                 rank: team.details.rank as string,
                 wins: team.details.wins as string,
                 losses: team.details.loss as string,

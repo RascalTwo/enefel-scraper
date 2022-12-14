@@ -37,7 +37,11 @@ export const teamScraper = (html: string) => {
         icon,
         team: fullName.pop(),
         city: fullName.join(" "),
-        profUrl,
+        profUrl:
+          profUrl === "/teams/indianapolis-colts" ||
+          profUrl === "/teams/houston-texans"
+            ? `${profUrl}/`
+            : profUrl,
         conference,
       } as RawTeam);
     }
