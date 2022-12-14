@@ -89,10 +89,10 @@ export const getTeamStats = async () => {
       },
     },
   });
-  const testTeams = teams.slice(0, 24);
+
   const withStats = [];
-  while (testTeams.length >= 1) {
-    const team = testTeams.pop();
+  while (teams.length >= 1) {
+    const team = teams.pop();
     if (team) {
       logger.start(`${team.urlSlug}`);
       const teamHTML = await getData(`${base}${team.urlSlug}stats`);
