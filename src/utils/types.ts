@@ -1,42 +1,77 @@
-export type Team = {
-  teamName: string;
-  urlSlug: string;
-  teamIcon: string;
-  teamCity: string;
+export type RawTeam = {
+  team: string;
+  profUrl: string;
+  city: string;
+  icon: string;
   conference: "AFC" | "NFC";
-  division: "north" | "south" | "east" | "west";
-};
-export type ScheduleGame = {
-  gameUrl: string | null;
-  date: string;
-  opponent: string;
-  homeOrAway: string;
-  outcome: string | null;
-  score: string | null;
 };
 export type RosterPlayer = {
-  statsUrl: string;
   headshot: string;
-  lineup: "Offense" | "Defense" | "Special Teams" | string | null;
   name: string;
+  playerUrl: string;
   number: string;
   position: string;
-  age: string;
+  status: string;
   height: string;
   weight: string;
   experience: string;
-  college: string | null;
+  college: string;
 };
-export type Category = {
-  category: string | null;
-  seasons: Season[];
+export type RawTeamStats = {
+  id?: string;
+  first_downs: RawFirstDown;
+  down_conversion: RawDownConversion;
+  general: RawGeneral;
+  rushing: RawRushing;
+  passing: RawPassing;
+  sacks: string;
+  field_goals: RawFieldGoal;
+  touch_downs: RawTD;
+  turnover_ratio: string;
 };
-export type Season = {
-  season: string | null;
-  team: string | null;
-  stats: Stat[];
+type RawFirstDown = {
+  id?: string;
+  total_first_downs: string;
+  rushing: string;
+  passing: string;
+  penalty: string;
 };
-export type Stat = {
-  title: string | null;
-  stat: string | null;
+type RawDownConversion = {
+  id?: string;
+  down: string;
+  successful: string;
+  attempts: string;
+};
+type RawGeneral = {
+  id?: string;
+  total_yards: string;
+  plays: string;
+  average: string;
+};
+type RawRushing = {
+  id?: string;
+  total_yards: string;
+  plays: string;
+  average: string;
+};
+type RawPassing = {
+  id?: string;
+  total_yards: string;
+  completions: string;
+  attempts: string;
+  interceptions: string;
+  average: string;
+};
+type RawFieldGoal = {
+  id?: string;
+  successful: string;
+  attempts: string;
+};
+type RawTD = {
+  id?: string;
+  total: string;
+  rushing: string;
+  passing: string;
+  returns: string;
+  defensive: string;
 };

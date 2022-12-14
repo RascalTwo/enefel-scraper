@@ -27,14 +27,89 @@ datasource db {
 
 model Team {
   id         String         @id @default(uuid())
-  teamName   String
-  teamIcon   String
-  teamCity   String
+  name       String         @unique
+  icon       String
+  city       String
   conference String
   division   String
   urlSlug    String
+  details    TeamDetails?
   schedule   ScheduleGame[]
   roster     Player[]
+  stats      TeamStat?
+}
+
+model TeamDetails {
+  id      String @id @default(uuid())
+  rank    String
+  wins    String
+  losses  String
+  ties    String
+  coach   String
+  stadium String
+  team    Team   @relation(fields: [team_id], references: [id])
+  team_id String @unique
+}
+
+model TeamStat {
+  id               String               @id @default(uuid())
+  first_downs      TeamFirstDown?
+  down_conversions TeamDownConversion[]
+  offense          TeamOffense[]
+  sacks            String
+  field_goals      TeamFieldGoal?
+  touch_downs      TeamTouchDown?
+  turnover_ratio   String
+  team             Team                 @relation(fields: [team_id], references: [id])
+  team_id          String               @unique
+}
+
+model TeamTouchDown {
+  id           String   @id @default(uuid())
+  total        String
+  rushing      String
+  passing      String
+  returns      String
+  defensive    String
+  team_stat    TeamStat @relation(fields: [team_stat_id], references: [id])
+  team_stat_id String   @unique
+}
+
+model TeamFieldGoal {
+  id           String   @id @default(uuid())
+  successful   String
+  attempts     String
+  team_stat    TeamStat @relation(fields: [team_stat_id], references: [id])
+  team_stat_id String   @unique
+}
+
+model TeamOffense {
+  id            String   @id @default(uuid())
+  type          String // General Rushing Passing
+  total_yards   String
+  plays         String
+  average_yards String
+  team_stat     TeamStat @relation(fields: [team_stat_id], references: [id])
+  team_stat_id  String   @unique
+}
+
+model TeamFirstDown {
+  id                String   @id @default(uuid())
+  total_first_downs String
+  rushing           String
+  passing           String
+  penalty           String
+  team_stat         TeamStat @relation(fields: [team_stat_id], references: [id])
+  team_stat_id      String   @unique
+}
+
+model TeamDownConversion {
+  id           String   @id @default(uuid())
+  down         String
+  successful   String
+  attempts     String
+  team_stat    TeamStat @relation(fields: [team_stat_id], references: [id])
+  team_stat_id String   @unique
 }
 
 model ScheduleGame {
@@ -51,30 +126,27 @@ model ScheduleGame {
 
 model Player {
   id         String  @id @default(uuid())
-  statsUrl   String
-  headshot   String
-  lineup     String?
+  slugUrl    String?
+  headshot   String?
   name       String
   number     String?
-  position   String
-  age        String
+  position   String?
   height     String
   weight     String
-  experience String
+  experience String?
   college    String?
   status     String?
-  stats      Stat[]
   team       Team    @relation(fields: [team_id], references: [id])
   team_id    String
 }
 
-model Stat {
-  id        String  @id @default(uuid())
-  season    String?
-  category  String?
-  team      String?
-  title     String?
-  stat      String?
-  player    Player  @relation(fields: [player_id], references: [id])
-  player_id String
-}
+// model Stat {
+//   id        String  @id @default(uuid())
+//   season    String?
+//   category  String?
+//   team      String?
+//   title     String?
+//   stat      String?
+//   player    Player  @relation(fields: [player_id], references: [id])
+//   player_id String
+// }
