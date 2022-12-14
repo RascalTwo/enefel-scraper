@@ -55,7 +55,7 @@ model TeamStat {
   id               String               @id @default(uuid())
   first_downs      TeamFirstDown?
   down_conversions TeamDownConversion[]
-  offense          TeamOffense[]
+  offense          TeamOffense?
   sacks            String
   field_goals      TeamFieldGoal?
   touch_downs      TeamTouchDown?
