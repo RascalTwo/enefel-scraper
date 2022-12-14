@@ -109,7 +109,7 @@ model TeamDownConversion {
   successful   String
   attempts     String
   team_stat    TeamStat @relation(fields: [team_stat_id], references: [id])
-  team_stat_id String   @unique
+  team_stat_id String
 }
 
 model ScheduleGame {

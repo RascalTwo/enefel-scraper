@@ -49,7 +49,7 @@ const seedTeamsStats = async () => {
                         attempts: dc.attempts as string,
                       },
                       where: {
-                        id: dc.id ? dc.id : "",
+                        id: dc.id ? dc.id : "123123123",
                       },
                     })),
                   },
