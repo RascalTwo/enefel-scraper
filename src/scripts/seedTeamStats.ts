@@ -48,10 +48,31 @@ const seedTeamsStats = async () => {
                         successful: dc.successful as string,
                         attempts: dc.attempts as string,
                       },
-                      where: { id: dc.id },
+                      where: {
+                        id: dc.id ? dc.id : "",
+                      },
                     })),
                   },
                   // offense
+                  offense: {
+                    upsert: [
+                      {
+                        create: {
+                          type: "testing offense",
+                          total_yards: "hello",
+                          plays: "yellow",
+                          average_yards: "mellow",
+                        },
+                        update: {
+                          type: "testing",
+                          total_yards: "yellow",
+                          plays: "bellow",
+                          average_yards: "fellow",
+                        },
+                        where: { id: "2342" },
+                      },
+                    ],
+                  },
                   sacks: team?.stats.sacks,
                   field_goals: {
                     upsert: {
