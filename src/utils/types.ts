@@ -5,17 +5,6 @@ export type RawTeam = {
   icon: string;
   conference: "AFC" | "NFC";
 };
-export type ScheduleGame = {
-  date: string;
-  gameUrl: string;
-  status: string;
-  away: ScheduleTeam;
-  home: ScheduleTeam;
-};
-type ScheduleTeam = {
-  team: string;
-  score: string;
-};
 export type RosterPlayer = {
   headshot: string;
   name: string;
@@ -28,16 +17,61 @@ export type RosterPlayer = {
   experience: string;
   college: string;
 };
-export type Category = {
-  category: string | null;
-  seasons: Season[];
+export type RawTeamStats = {
+  id?: string;
+  first_downs: RawFirstDown;
+  down_conversion: RawDownConversion;
+  general: RawGeneral;
+  rushing: RawRushing;
+  passing: RawPassing;
+  sacks: string;
+  field_goals: RawFieldGoal;
+  touch_downs: RawTD;
+  turnover_ratio: string;
 };
-export type Season = {
-  season: string | null;
-  team: string | null;
-  stats: Stat[];
+type RawFirstDown = {
+  id?: string;
+  total_first_downs: string;
+  rushing: string;
+  passing: string;
+  penalty: string;
 };
-export type Stat = {
-  title: string | null;
-  stat: string | null;
+type RawDownConversion = {
+  id?: string;
+  down: string;
+  successful: string;
+  attempts: string;
+};
+type RawGeneral = {
+  id?: string;
+  total_yards: string;
+  plays: string;
+  average: string;
+};
+type RawRushing = {
+  id?: string;
+  total_yards: string;
+  plays: string;
+  average: string;
+};
+type RawPassing = {
+  id?: string;
+  total_yards: string;
+  completions: string;
+  attempts: string;
+  interceptions: string;
+  average: string;
+};
+type RawFieldGoal = {
+  id?: string;
+  successful: string;
+  attempts: string;
+};
+type RawTD = {
+  id?: string;
+  total: string;
+  rushing: string;
+  passing: string;
+  returns: string;
+  defensive: string;
 };

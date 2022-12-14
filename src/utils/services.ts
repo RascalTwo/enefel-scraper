@@ -7,7 +7,7 @@ import {
   teamRosterScraper,
   teamStatsScraper,
 } from "./scrapers.js";
-import { RawTeam } from "./types.js";
+import { RawTeam, RawTeamStats } from "./types.js";
 
 export const getData = async (url: string): Promise<string> => {
   try {
@@ -98,7 +98,28 @@ export const getTeamStats = async () => {
       const teamHTML = await getData(`${base}${team.urlSlug}stats`);
       const stats = teamStatsScraper(teamHTML);
 
-      withStats.push({ ...team, stats: { ...team.stats, ...stats } });
+      withStats.push({
+        ...team,
+        stats: {
+          ...team.stats,
+          first_downs: { ...team.stats?.first_downs, ...stats?.first_downs },
+          down_conversions: [
+            {
+              ...team.stats?.down_conversions[0],
+              ...stats?.down_conversions[0],
+            },
+            {
+              ...team.stats?.down_conversions[1],
+              ...stats?.down_conversions[1],
+            },
+          ],
+          offense: [],
+          sacks: stats?.sacks,
+          field_goals: { ...team.stats?.field_goals, ...stats?.field_goals },
+          touch_downs: { ...team.stats?.touch_downs, ...stats?.touch_downs },
+          turnover_ratio: stats?.turnover_ratio,
+        },
+      });
     }
   }
   return withStats;

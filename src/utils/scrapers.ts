@@ -1,12 +1,5 @@
 import { JSDOM } from "jsdom";
-import {
-  Category,
-  RawTeam,
-  RosterPlayer,
-  ScheduleGame,
-  Season,
-  Stat,
-} from "./types.js";
+import { RawTeam, RawTeamStats, RosterPlayer } from "./types.js";
 import { logger } from "./logger.js";
 
 const getDocument = (html: string) => {
@@ -136,10 +129,10 @@ export const teamStatsScraper = (html: string) => {
     const total_first_downs = listItemEls![0].firstChild?.textContent;
     const fdRaw = listItemEls![1];
     const first_downs = {
-      total_first_downs,
-      rushing: fdRaw.querySelector("span")?.textContent,
-      passing: fdRaw.querySelector("span + span")?.textContent,
-      penalty: fdRaw.querySelector("span + span + span")?.textContent,
+      total_first_downs: total_first_downs as string,
+      rushing: fdRaw.querySelector("span")?.textContent as string,
+      passing: fdRaw.querySelector("span + span")?.textContent as string,
+      penalty: fdRaw.querySelector("span + span + span")?.textContent as string,
     };
 
     const thirdSuccessful = listItemEls![2].firstChild?.textContent
@@ -151,13 +144,13 @@ export const teamStatsScraper = (html: string) => {
     const down_conversions = [
       {
         down: "third",
-        successful: thirdSuccessful![0],
-        attempts: thirdSuccessful![1],
+        successful: thirdSuccessful![0] as string,
+        attempts: thirdSuccessful![1] as string,
       },
       {
         down: "fourth",
-        successful: fourthSuccessful![0],
-        attempts: fourthSuccessful![1],
+        successful: fourthSuccessful![0] as string,
+        attempts: fourthSuccessful![1] as string,
       },
     ];
 
@@ -168,31 +161,33 @@ export const teamStatsScraper = (html: string) => {
     const totPass = listItemEls![8].firstChild?.textContent;
     const passRow = listItemEls![9];
     const general = {
-      total_yards: totOff,
-      plays: playsRow.querySelector("span")?.textContent,
-      average: playsRow.querySelector("span + span")?.textContent,
+      total_yards: totOff as string,
+      plays: playsRow.querySelector("span")?.textContent as string,
+      average: playsRow.querySelector("span + span")?.textContent as string,
     };
     const rushing = {
-      total_yards: totRush,
-      plays: rushRow.querySelector("span")?.textContent,
-      average: rushRow.querySelector("span + span")?.textContent,
+      total_yards: totRush as string,
+      plays: rushRow.querySelector("span")?.textContent as string,
+      average: rushRow.querySelector("span + span")?.textContent as string,
     };
     const passing = {
-      total_yards: totPass,
-      completions: passRow.querySelector("span")?.textContent,
-      attempts: passRow.querySelector("span + span")?.textContent,
-      interceptions: passRow.querySelector("span + span + span")?.textContent,
-      average: passRow.querySelector("span + span + span + span")?.textContent,
+      total_yards: totPass as string,
+      completions: passRow.querySelector("span")?.textContent as string,
+      attempts: passRow.querySelector("span + span")?.textContent as string,
+      interceptions: passRow.querySelector("span + span + span")
+        ?.textContent as string,
+      average: passRow.querySelector("span + span + span + span")
+        ?.textContent as string,
     };
 
-    const sacks = listItemEls![10].firstChild?.textContent;
+    const sacks = listItemEls![10].firstChild?.textContent as string;
 
     const fgRow = listItemEls![11].firstChild?.textContent
       ?.split("/")
       .map((s) => s.trim());
     const field_goals = {
-      successful: fgRow![0],
-      attempts: fgRow![1],
+      successful: fgRow![0] as string,
+      attempts: fgRow![1] as string,
     };
 
     const totTD = listItemEls![12].firstChild?.textContent;
@@ -202,14 +197,14 @@ export const teamStatsScraper = (html: string) => {
     const returnTD = tdRow.querySelector("span + span + span")?.textContent;
     const defTD = tdRow.querySelector("span + span + span + span")?.textContent;
     const touch_downs = {
-      total: totTD,
-      rushing: rushTD,
-      passing: passTD,
-      returns: returnTD,
-      defensive: defTD,
+      total: totTD as string,
+      rushing: rushTD as string,
+      passing: passTD as string,
+      returns: returnTD as string,
+      defensive: defTD as string,
     };
 
-    const turnover_ratio = listItemEls![14]?.firstChild?.textContent;
+    const turnover_ratio = listItemEls![14]?.firstChild?.textContent as string;
 
     const stats = {
       first_downs,
