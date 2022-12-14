@@ -85,60 +85,199 @@ export const teamDetailsScraper = (html: string) => {
   }
 };
 
-export const scheduleScraper = async (html: string) => {
+export const teamRosterScraper = (html: string) => {
   const document = getDocument(html);
-  const gamesContainerEl = document.querySelectorAll("div.nfl-c-matchup-strip");
-  console.log("games", gamesContainerEl.length);
-
-  const formattedGames: ScheduleGame[] = [];
-  gamesContainerEl.forEach((el) => {
-    const date = el.parentElement?.querySelector(
-      "h2.d3-o-section-title"
+  const tableRowEls = document.querySelectorAll(
+    "table.d3-o-table--detailed tbody > tr"
+  );
+  const roster: RosterPlayer[] = [];
+  tableRowEls.forEach((tr) => {
+    const headshot = tr.querySelector("td picture img")?.getAttribute("src");
+    const playerAnchorEl = tr.querySelector("td a.nfl-o-roster__player-name");
+    const name = playerAnchorEl?.textContent;
+    const playerUrl = playerAnchorEl?.getAttribute("href");
+    const number = tr.querySelector("td + td")?.textContent;
+    const position = tr.querySelector("td + td + td")?.textContent;
+    const status = tr.querySelector("td + td + td + td")?.textContent;
+    const height = tr.querySelector("td + td + td + td + td")?.textContent;
+    const weight = tr.querySelector("td + td + td + td + td + td")?.textContent;
+    const experience = tr.querySelector(
+      "td + td + td + td + td + td + td"
     )?.textContent;
-    const gameUrl = el
-      .querySelector("a.nfl-c-matchup-strip__left-area")
-      ?.getAttribute("href");
-    const status = el.querySelector(
-      "p.nfl-c-matchup-strip__period"
-    )?.textContent;
-    const awayEl = el.querySelector("div.nfl-c-matchup-strip__team--opponent");
-    const awayTeam = awayEl?.querySelector(
-      "span.nfl-c-matchup-strip__team-fullname"
-    )?.textContent;
-    const awayScore = awayEl?.querySelector(
-      "div.nfl-c-matchup-strip__team-score"
-    )?.textContent;
-    const homeEl = el.querySelector(
-      "div.nfl-c-matchup-strip__team div.nfl-c-matchup-strip__team"
-    );
-    const homeTeam = homeEl?.querySelector(
-      "span.nfl-c-matchup-strip__team-fullname"
-    )?.textContent;
-    const homeScore = homeEl?.querySelector(
-      "div.nfl-c-matchup-strip__team-score"
+    const college = tr.querySelector(
+      "td + td + td + td + td + td + td + td"
     )?.textContent;
 
-    // remove
-    logger.base(
-      `date: ${date}\ngameURL: ${gameUrl}\nstatus: ${status}\naway: ${awayTeam}\nhome: ${homeTeam}`
-    );
-
-    formattedGames.push({
-      date: date as string,
-      gameUrl: gameUrl as string,
-      status: status as string,
-      away: {
-        team: awayTeam as string,
-        score: awayScore as string,
-      },
-      home: {
-        team: homeTeam as string,
-        score: homeScore as string,
-      },
-    });
+    roster.push({
+      headshot,
+      name,
+      playerUrl,
+      number,
+      position,
+      status,
+      height,
+      weight,
+      experience,
+      college,
+    } as RosterPlayer);
   });
-  return formattedGames;
+  return roster;
 };
+
+export const teamStatsScraper = (html: string) => {
+  const document = getDocument(html);
+  const listEl = document.querySelector("ul.nfl-o-team-h2h-stats__list");
+  const listItemEls = listEl?.querySelectorAll("li");
+  if (typeof listItemEls !== undefined) {
+    const total_first_downs = listItemEls![0].firstChild?.textContent;
+    const fdRaw = listItemEls![1];
+    const first_downs = {
+      total_first_downs,
+      rushing: fdRaw.querySelector("span")?.textContent,
+      passing: fdRaw.querySelector("span + span")?.textContent,
+      penalty: fdRaw.querySelector("span + span + span")?.textContent,
+    };
+
+    const thirdSuccessful = listItemEls![2].firstChild?.textContent
+      ?.split("/")
+      .map((s) => s.trim());
+    const fourthSuccessful = listItemEls![3].firstChild?.textContent
+      ?.split("/")
+      .map((s) => s.trim());
+    const down_conversions = [
+      {
+        down: "third",
+        successful: thirdSuccessful![0],
+        attempts: thirdSuccessful![1],
+      },
+      {
+        down: "fourth",
+        successful: fourthSuccessful![0],
+        attempts: fourthSuccessful![1],
+      },
+    ];
+
+    const totOff = listItemEls![4].firstChild?.textContent;
+    const playsRow = listItemEls![5];
+    const totRush = listItemEls![6].firstChild?.textContent;
+    const rushRow = listItemEls![7];
+    const totPass = listItemEls![8].firstChild?.textContent;
+    const passRow = listItemEls![9];
+    const general = {
+      total_yards: totOff,
+      plays: playsRow.querySelector("span")?.textContent,
+      average: playsRow.querySelector("span + span")?.textContent,
+    };
+    const rushing = {
+      total_yards: totRush,
+      plays: rushRow.querySelector("span")?.textContent,
+      average: rushRow.querySelector("span + span")?.textContent,
+    };
+    const passing = {
+      total_yards: totPass,
+      completions: passRow.querySelector("span")?.textContent,
+      attempts: passRow.querySelector("span + span")?.textContent,
+      interceptions: passRow.querySelector("span + span + span")?.textContent,
+      average: passRow.querySelector("span + span + span + span")?.textContent,
+    };
+
+    const sacks = listItemEls![10].firstChild?.textContent;
+
+    const fgRow = listItemEls![11].firstChild?.textContent
+      ?.split("/")
+      .map((s) => s.trim());
+    const field_goals = {
+      successful: fgRow![0],
+      attempts: fgRow![1],
+    };
+
+    const totTD = listItemEls![12].firstChild?.textContent;
+    const tdRow = listItemEls![13];
+    const rushTD = tdRow.querySelector("span")?.textContent;
+    const passTD = tdRow.querySelector("span + span")?.textContent;
+    const returnTD = tdRow.querySelector("span + span + span")?.textContent;
+    const defTD = tdRow.querySelector("span + span + span + span")?.textContent;
+    const touch_downs = {
+      total: totTD,
+      rushing: rushTD,
+      passing: passTD,
+      returns: returnTD,
+      defensive: defTD,
+    };
+
+    const turnover_ratio = listItemEls![14]?.firstChild?.textContent;
+
+    const stats = {
+      first_downs,
+      down_conversions,
+      general,
+      rushing,
+      passing,
+      sacks,
+      field_goals,
+      touch_downs,
+      turnover_ratio,
+    };
+
+    return stats;
+  }
+};
+
+// ********** DOA ***********
+// export const scheduleScraper = async (html: string) => {
+//   const document = getDocument(html);
+//   const gamesContainerEl = document.querySelectorAll("div.nfl-c-matchup-strip");
+//   console.log("games", gamesContainerEl.length);
+
+//   const formattedGames: ScheduleGame[] = [];
+//   gamesContainerEl.forEach((el) => {
+//     const date = el.parentElement?.querySelector(
+//       "h2.d3-o-section-title"
+//     )?.textContent;
+//     const gameUrl = el
+//       .querySelector("a.nfl-c-matchup-strip__left-area")
+//       ?.getAttribute("href");
+//     const status = el.querySelector(
+//       "p.nfl-c-matchup-strip__period"
+//     )?.textContent;
+//     const awayEl = el.querySelector("div.nfl-c-matchup-strip__team--opponent");
+//     const awayTeam = awayEl?.querySelector(
+//       "span.nfl-c-matchup-strip__team-fullname"
+//     )?.textContent;
+//     const awayScore = awayEl?.querySelector(
+//       "div.nfl-c-matchup-strip__team-score"
+//     )?.textContent;
+//     const homeEl = el.querySelector(
+//       "div.nfl-c-matchup-strip__team div.nfl-c-matchup-strip__team"
+//     );
+//     const homeTeam = homeEl?.querySelector(
+//       "span.nfl-c-matchup-strip__team-fullname"
+//     )?.textContent;
+//     const homeScore = homeEl?.querySelector(
+//       "div.nfl-c-matchup-strip__team-score"
+//     )?.textContent;
+
+//     // remove
+//     logger.base(
+//       `date: ${date}\ngameURL: ${gameUrl}\nstatus: ${status}\naway: ${awayTeam}\nhome: ${homeTeam}`
+//     );
+
+//     formattedGames.push({
+//       date: date as string,
+//       gameUrl: gameUrl as string,
+//       status: status as string,
+//       away: {
+//         team: awayTeam as string,
+//         score: awayScore as string,
+//       },
+//       home: {
+//         team: homeTeam as string,
+//         score: homeScore as string,
+//       },
+//     });
+//   });
+//   return formattedGames;
+// };
 
 // const formatScheduleRowData = (row: HTMLTableRowElement) => {
 //   const date = row.querySelector(

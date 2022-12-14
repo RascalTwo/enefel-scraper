@@ -1,7 +1,12 @@
 import axios from "axios";
+import prisma from "../utils/db.js";
 import { base } from "./consts.js";
 import { logger } from "./logger.js";
-import { scheduleScraper, teamDetailsScraper } from "./scrapers.js";
+import {
+  teamDetailsScraper,
+  teamRosterScraper,
+  teamStatsScraper,
+} from "./scrapers.js";
 import { RawTeam } from "./types.js";
 
 export const getData = async (url: string): Promise<string> => {
@@ -32,49 +37,116 @@ export const getTeamDetails = async (teamArr: RawTeam[]) => {
   return teamsWithDetails;
 };
 
-export const getSchedules = async () => {
-  const weeks = [
-    "PRE1",
-    // "PRE2",
-    // "PRE3",
-    // "REG1",
-    // "REG2",
-    // "REG3",
-    // "REG4",
-    // "REG5",
-    // "REG6",
-    // "REG7",
-    // "REG8",
-    // "REG9",
-    // "REG10",
-    // "REG11",
-    // "REG12",
-    // "REG13",
-    // "REG14",
-    // "REG15",
-    // "REG16",
-    // "REG17",
-    // "REG18",
-  ];
-  const formatWeeks = [];
-  while (weeks.length >= 1) {
-    const week = weeks.pop();
-    logger.start(week as string);
-    const schedHTML = await getData(`${base}/schedules/2022/${week}/`);
-    const schedData = await scheduleScraper(schedHTML);
-    // console.log("data", schedHTML);
+export const getTeamRosters = async () => {
+  const teams = await prisma.team.findMany();
+  const withRoster = [];
+  while (teams.length >= 1) {
+    const team = teams.pop();
+    if (team) {
+      const teamHTML = await getData(`${base}${team.urlSlug}roster`);
+      const roster = teamRosterScraper(teamHTML);
 
-    formatWeeks.push({
-      week: week?.match("REG")
-        ? week.replace("REG", "week ")
-        : week?.replace("PRE", "preseason "),
-      schedule: schedData,
-    });
-    logger.success(week as string);
+      withRoster.push({ ...team, roster: roster });
+    }
   }
-
-  return formatWeeks;
+  return withRoster;
 };
+
+export const getTeamStats = async () => {
+  const teams = await prisma.team.findMany({
+    select: {
+      id: true,
+      urlSlug: true,
+      stats: {
+        select: {
+          id: true,
+          first_downs: {
+            select: {
+              id: true,
+            },
+          },
+          down_conversions: {
+            select: {
+              id: true,
+            },
+          },
+          offense: {
+            select: {
+              id: true,
+            },
+          },
+          field_goals: {
+            select: {
+              id: true,
+            },
+          },
+          touch_downs: {
+            select: {
+              id: true,
+            },
+          },
+        },
+      },
+    },
+  });
+  const testTeams = teams.slice(0, 2);
+
+  const withStats = [];
+  while (testTeams.length >= 1) {
+    const team = testTeams.pop();
+    if (team) {
+      const teamHTML = await getData(`${base}${team.urlSlug}stats`);
+      const stats = teamStatsScraper(teamHTML);
+
+      withStats.push({ ...team, stats: { ...team.stats, ...stats } });
+    }
+  }
+  return withStats;
+};
+
+// export const getSchedules = async () => {
+//   const weeks = [
+//     "PRE1",
+//     // "PRE2",
+//     // "PRE3",
+//     // "REG1",
+//     // "REG2",
+//     // "REG3",
+//     // "REG4",
+//     // "REG5",
+//     // "REG6",
+//     // "REG7",
+//     // "REG8",
+//     // "REG9",
+//     // "REG10",
+//     // "REG11",
+//     // "REG12",
+//     // "REG13",
+//     // "REG14",
+//     // "REG15",
+//     // "REG16",
+//     // "REG17",
+//     // "REG18",
+//   ];
+//   const formatWeeks = [];
+//   while (weeks.length >= 1) {
+//     const week = weeks.pop();
+//     logger.start(week as string);
+//     const schedHTML = await getData(`${base}/schedules/2022/${week}/`);
+//     const schedData = await scheduleScraper(schedHTML);
+//     // console.log("data", schedHTML);
+
+//     formatWeeks.push({
+//       week: week?.match("REG")
+//         ? week.replace("REG", "week ")
+//         : week?.replace("PRE", "preseason "),
+//       schedule: schedData,
+//     });
+//     logger.success(week as string);
+//   }
+
+//   return formatWeeks;
+// };
 
 // export const getRoster = async (
 //   arr: (Team & { schedule: ScheduleGame[] })[]

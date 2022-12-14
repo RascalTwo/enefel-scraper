@@ -14,7 +14,7 @@ const seedTeams = async () => {
       try {
         logger.start(`${team.team} seed`);
         const seed = await prisma.team.upsert({
-          where: { teamName: team.team },
+          where: { name: team.team },
           update: {
             details: {
               update: {
@@ -28,10 +28,10 @@ const seedTeams = async () => {
             },
           },
           create: {
-            teamName: team.team,
-            teamIcon: team.icon,
+            name: team.team,
+            icon: team.icon,
             urlSlug: team.profUrl,
-            teamCity: team.city,
+            city: team.city,
             conference: team.conference,
             division: team.details.division as string,
             details: {

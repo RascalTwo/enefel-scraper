@@ -17,17 +17,16 @@ type ScheduleTeam = {
   score: string;
 };
 export type RosterPlayer = {
-  statsUrl: string;
   headshot: string;
-  lineup: "Offense" | "Defense" | "Special Teams" | string | null;
   name: string;
+  playerUrl: string;
   number: string;
   position: string;
-  age: string;
+  status: string;
   height: string;
   weight: string;
   experience: string;
-  college: string | null;
+  college: string;
 };
 export type Category = {
   category: string | null;
