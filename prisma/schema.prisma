@@ -26,7 +26,7 @@ datasource db {
 // }
 
 model Team {
-  id         String         @id @default(uuid())
+  id         String         @id @unique @default(uuid())
   name       String         @unique
   icon       String
   city       String
@@ -40,7 +40,7 @@ model Team {
 }
 
 model TeamDetails {
-  id      String @id @default(uuid())
+  id      String @id @unique @default(uuid())
   rank    String
   wins    String
   losses  String
@@ -52,7 +52,7 @@ model TeamDetails {
 }
 
 model TeamStat {
-  id               String               @id @default(uuid())
+  id               String               @id @unique @default(uuid())
   first_downs      TeamFirstDown?
   down_conversions TeamDownConversion[]
   offense          TeamOffense?
@@ -65,7 +65,7 @@ model TeamStat {
 }
 
 model TeamTouchDown {
-  id           String   @id @default(uuid())
+  id           String   @id @unique @default(uuid())
   total        String
   rushing      String
   passing      String
@@ -76,7 +76,7 @@ model TeamTouchDown {
 }
 
 model TeamFieldGoal {
-  id           String   @id @default(uuid())
+  id           String   @id @unique @default(uuid())
   successful   String
   attempts     String
   team_stat    TeamStat @relation(fields: [team_stat_id], references: [id])
@@ -85,7 +85,7 @@ model TeamFieldGoal {
 
 // fix this!!!
 model TeamOffense {
-  id                    String   @id @default(uuid())
+  id                    String   @id @unique @default(uuid())
   general_total_yards   String
   general_plays         String
   general_average_yards String
@@ -101,7 +101,7 @@ model TeamOffense {
 }
 
 model TeamFirstDown {
-  id                String   @id @default(uuid())
+  id                String   @id @unique @default(uuid())
   total_first_downs String
   rushing           String
   passing           String
@@ -111,7 +111,7 @@ model TeamFirstDown {
 }
 
 model TeamDownConversion {
-  id           String   @id @default(uuid())
+  id           String   @id @unique @default(uuid())
   down         String
   successful   String
   attempts     String
@@ -120,7 +120,7 @@ model TeamDownConversion {
 }
 
 model ScheduleGame {
-  id         String @id @default(uuid())
+  id         String @id @unique @default(uuid())
   gameUrl    String
   date       String
   opponent   String // Team relation
@@ -132,7 +132,7 @@ model ScheduleGame {
 }
 
 model Player {
-  id         String  @id @default(uuid())
+  id         String       @id @unique @default(uuid())
   slugUrl    String?
   headshot   String?
   name       String
@@ -143,17 +143,25 @@ model Player {
   experience String?
   college    String?
   status     String?
-  team       Team    @relation(fields: [team_id], references: [id])
+  stats      PlayerStat[]
+  team       Team         @relation(fields: [team_id], references: [id])
   team_id    String
 }
 
-// model Stat {
-//   id        String  @id @default(uuid())
-//   season    String?
-//   category  String?
-//   team      String?
-//   title     String?
-//   stat      String?
-//   player    Player  @relation(fields: [player_id], references: [id])
-//   player_id String
-// }
+model PlayerStat {
+  id          String              @id @unique @default(uuid())
+  week        String
+  opponent    String
+  result      String
+  performance PlayerPerformance[]
+  player      Player              @relation(fields: [player_id], references: [id])
+  player_id   String
+}
+
+model PlayerPerformance {
+  id             String      @id @unique @default(uuid())
+  title          String
+  stat           String
+  Player_stat    PlayerStat? @relation(fields: [player_stat_id], references: [id])
+  player_stat_id String
+}

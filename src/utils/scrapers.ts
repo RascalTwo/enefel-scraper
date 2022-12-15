@@ -221,3 +221,45 @@ export const teamStatsScraper = (html: string) => {
     return stats;
   }
 };
+
+export const playerScraper = (html: string) => {
+  const document = getDocument(html);
+  const status =
+    document.querySelector("h3.nfl-c-player-header__roster-status")
+      ?.textContent ?? "inactive";
+  logger.base(`${status}`);
+  const tableEl = document.querySelector("table.d3-o-table");
+  const tableHeadingEl = tableEl?.querySelectorAll("thead > tr > th");
+  const tableRowEls = tableEl?.querySelectorAll("tbody tr");
+  const weekStats: {
+    week: string | null | undefined;
+    opponent: string | null | undefined;
+    result: string | null | undefined;
+    stats: { title: string | null; stat: string | null }[];
+  }[] = [];
+  tableRowEls?.forEach((row) => {
+    const tdEl = row.querySelectorAll("td");
+    const week = row.querySelector("td")?.textContent;
+    const opponent = row.querySelector("td + td")?.textContent;
+    const result = row.querySelector("td + td + td")?.textContent;
+    const stats: { title: string | null; stat: string | null }[] = [];
+    tdEl.forEach((td, idx) => {
+      if (tableHeadingEl && idx > 2) {
+        stats.push({
+          title: tableHeadingEl[idx].textContent,
+          stat: td.textContent,
+        });
+      }
+    });
+    weekStats.push({
+      week,
+      opponent,
+      result,
+      stats,
+    });
+  });
+  return {
+    status,
+    stats: weekStats,
+  };
+};

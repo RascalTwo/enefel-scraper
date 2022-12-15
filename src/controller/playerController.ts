@@ -12,21 +12,38 @@ const getPlayers = async (req: Request, res: Response) => {
   res.json({ players: players });
 };
 
-const getPlayer = async (req: Request, res: Response) => {
+const getPlayerById = async (req: Request, res: Response) => {
+  const { playerID } = req.params;
+  const player = await prisma.player.findFirst({
+    where: {
+      id: playerID,
+    },
+    include: {
+      team: true,
+    },
+  });
+};
+
+const getPlayerSearch = async (req: Request, res: Response) => {
   const { playerslug } = req.params;
   const formatPlayer = playerslug
     .split(" ")
     .map((n) => formatTeam(n))
     .join(" ");
 
-  const player = await prisma.player.findFirst({
+  const player = await prisma.player.findMany({
     where: {
       name: formatPlayer,
     },
     include: {
       team: true,
+      stats: {
+        include: {
+          performance: true,
+        },
+      },
     },
   });
   res.json({ player });
 };
-export { getPlayers, getPlayer };
+export { getPlayers, getPlayerById, getPlayerSearch };

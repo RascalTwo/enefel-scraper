@@ -3,6 +3,7 @@ import prisma from "../utils/db.js";
 import { base } from "./consts.js";
 import { logger } from "./logger.js";
 import {
+  playerScraper,
   teamDetailsScraper,
   teamRosterScraper,
   teamStatsScraper,
@@ -134,4 +135,98 @@ export const getTeamStats = async () => {
     }
   }
   return withStats;
+};
+
+export const getPlayerStats = async () => {
+  const teams = await prisma.team.findMany({
+    select: {
+      id: true,
+      name: true,
+      roster: {
+        select: {
+          id: true,
+          name: true,
+          slugUrl: true,
+          stats: {
+            select: {
+              id: true,
+              performance: {
+                select: {
+                  id: true,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  });
+  const teamWithPlayerStats = [];
+
+  // ****************** remove next line after test
+  // const teams = rawteams.slice(0, 2);
+
+  while (teams.length >= 1) {
+    const team = teams.pop();
+    logger.start(`${team?.name}`);
+
+    const roster = team?.roster;
+    if (roster) {
+      const playerWithStats = await Promise.all(
+        roster.map(async (player) => {
+          logger.start(`${player?.name}`);
+          const playerHTML = await getData(`${base}${player?.slugUrl}stats`);
+
+          const playerWS = playerScraper(playerHTML);
+          const updatePlayer = playerWS.stats.map((s, i) => {
+            if (player.stats.length > 0 && player.stats[i].id) {
+              return {
+                id:
+                  player.stats && player.stats[i].id
+                    ? player.stats[i].id
+                    : null,
+                ...s,
+                stats: s.stats.map((stat, idx) => {
+                  if (
+                    player.stats[i].performance.length > 0 &&
+                    player?.stats[i]?.performance[idx]?.id
+                  ) {
+                    return {
+                      id: player?.stats[i].performance[idx]?.id ?? undefined,
+                      ...stat,
+                    };
+                  }
+                }),
+              };
+            } else {
+              return {
+                id: undefined,
+                ...s,
+                stats: s.stats.map((stat, idx) => {
+                  return {
+                    id: undefined,
+                    ...stat,
+                  };
+                }),
+              };
+            }
+          });
+
+          return {
+            ...player,
+            stats: {
+              status: playerWS.status,
+              stats: updatePlayer,
+            },
+          };
+        })
+      );
+
+      teamWithPlayerStats.push({
+        ...team,
+        roster: playerWithStats,
+      });
+    }
+  }
+  return teamWithPlayerStats;
 };
