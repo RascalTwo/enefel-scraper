@@ -53,25 +53,53 @@ const seedTeamsStats = async () => {
                       },
                     })),
                   },
-                  // offense
                   offense: {
-                    upsert: [
-                      {
-                        create: {
-                          type: "testing offense",
-                          total_yards: "hello",
-                          plays: "yellow",
-                          average_yards: "mellow",
-                        },
-                        update: {
-                          type: "testing",
-                          total_yards: "yellow",
-                          plays: "bellow",
-                          average_yards: "fellow",
-                        },
-                        where: { id: "2342" },
+                    upsert: {
+                      create: {
+                        general_total_yards: team.stats.offense
+                          .general_total_yards as string,
+                        general_plays: team.stats.offense
+                          .general_plays as string,
+                        general_average_yards: team.stats.offense
+                          .general_average_yards as string,
+                        rushing_total_yards: team.stats.offense
+                          .rushing_total_yards as string,
+                        rushing_plays: team.stats.offense
+                          .rushing_plays as string,
+                        rushing_average_yards: team.stats.offense
+                          .rushing_average_yards as string,
+                        passing_completions: team.stats.offense
+                          .passing_completions as string,
+                        passing_attempts: team.stats.offense
+                          .passing_attempts as string,
+                        passing_interceptions: team.stats.offense
+                          .passing_interceptions as string,
+                        passing_average_yards: team.stats.offense
+                          .passing_average_yards as string,
                       },
-                    ],
+                      update: {
+                        general_total_yards: team.stats.offense
+                          .general_total_yards as string,
+                        general_plays: team.stats.offense
+                          .general_plays as string,
+                        general_average_yards: team.stats.offense
+                          .general_average_yards as string,
+                        rushing_total_yards: team.stats.offense
+                          .rushing_total_yards as string,
+                        rushing_plays: team.stats.offense
+                          .rushing_plays as string,
+                        rushing_average_yards: team.stats.offense
+                          .rushing_average_yards as string,
+                        passing_completions: team.stats.offense
+                          .passing_completions as string,
+                        passing_attempts: team.stats.offense
+                          .passing_attempts as string,
+                        passing_interceptions: team.stats.offense
+                          .passing_interceptions as string,
+                        passing_average_yards: team.stats.offense
+                          .passing_average_yards as string,
+                      },
+                    },
                   },
                   sacks: team?.stats.sacks,
                   field_goals: {
@@ -123,7 +151,28 @@ const seedTeamsStats = async () => {
                       attempts: dc.attempts as string,
                     })),
                   },
-                  // offense
+                  offense: {
+                    create: {
+                      general_total_yards: team.stats.offense
+                        .general_total_yards as string,
+                      general_plays: team.stats.offense.general_plays as string,
+                      general_average_yards: team.stats.offense
+                        .general_average_yards as string,
+                      rushing_total_yards: team.stats.offense
+                        .rushing_total_yards as string,
+                      rushing_plays: team.stats.offense.rushing_plays as string,
+                      rushing_average_yards: team.stats.offense
+                        .rushing_average_yards as string,
+                      passing_completions: team.stats.offense
+                        .passing_completions as string,
+                      passing_attempts: team.stats.offense
+                        .passing_attempts as string,
+                      passing_interceptions: team.stats.offense
+                        .passing_interceptions as string,
+                      passing_average_yards: team.stats.offense
+                        .passing_average_yards as string,
+                    },
+                  },
                   sacks: team?.stats.sacks as string,
                   field_goals: {
                     create: {

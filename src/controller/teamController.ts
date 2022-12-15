@@ -11,11 +11,19 @@ const getTeam = async (req: Request, res: Response) => {
   const { teamslug } = req.params;
   const team = await prisma.team.findFirst({
     where: {
-      teamName: formatTeam(teamslug),
+      name: formatTeam(teamslug),
     },
     include: {
       roster: true,
-      schedule: true,
+      details: true,
+      stats: {
+        include: {
+          first_downs: true,
+          down_conversions: true,
+          field_goals: true,
+          touch_downs: true,
+        },
+      },
     },
   });
   res.json({ team });

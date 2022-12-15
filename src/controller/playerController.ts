@@ -6,14 +6,7 @@ const getPlayers = async (req: Request, res: Response) => {
   const { team } = req.params;
   const players = await prisma.team.findFirst({
     where: {
-      teamName: formatTeam(team),
-    },
-    include: {
-      roster: {
-        include: {
-          stats: true,
-        },
-      },
+      name: formatTeam(team),
     },
   });
   res.json({ players: players });
@@ -32,7 +25,6 @@ const getPlayer = async (req: Request, res: Response) => {
     },
     include: {
       team: true,
-      stats: true,
     },
   });
   res.json({ player });
