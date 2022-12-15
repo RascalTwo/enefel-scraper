@@ -10,9 +10,10 @@
     "start": "npm run build && node dist/index.js",
     "lint": "npx eslint . --ext .ts",
     "test": "npx ts-node src/test.ts",
-    "seed": "npx ts-node src/scripts/seedTeams.ts",
-    "seedP": "npx ts-node src/scripts/seedPlayers.ts",
-    "seedTS": "npx ts-node src/scripts/seedTeamStats.ts"
+    "seed": "npm run update-teams && npm run update-teams-stats && npx ts-node src/scripts/seedPlayers.ts",
+    "update-teams": "npx ts-node src/scripts/updateTeamStats.ts",
+    "update-teams-stats": "npx ts-node src/scripts/updateTeamStats.ts",
+    "update-players-stats": "npx ts-node src/scripts/updatePlayerStats.ts"
   },
   "keywords": [],
   "author": "",

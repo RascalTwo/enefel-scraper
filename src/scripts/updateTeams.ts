@@ -4,7 +4,7 @@ import { getData, getTeamDetails } from "../utils/services.js";
 import { logger } from "../utils/logger.js";
 import prisma from "../utils/db.js";
 
-const seedTeams = async () => {
+const updateTeams = async () => {
   const teamsHTML = await getData(teamsUrl);
   const teams = teamScraper(teamsHTML);
   const withDetails = await getTeamDetails(teams);
@@ -52,4 +52,4 @@ const seedTeams = async () => {
     }
   }
 };
-seedTeams();
+updateTeams();

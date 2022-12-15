@@ -4,7 +4,7 @@ import { getData, getTeamStats } from "../utils/services.js";
 import { logger } from "../utils/logger.js";
 import prisma from "../utils/db.js";
 
-const seedTeamsStats = async () => {
+const updateTeamsStats = async () => {
   const withStats = await getTeamStats();
   while (withStats.length >= 1) {
     try {
@@ -204,4 +204,4 @@ const seedTeamsStats = async () => {
   }
 };
 
-seedTeamsStats();
+updateTeamsStats();
