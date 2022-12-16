@@ -25,6 +25,13 @@ datasource db {
 //   id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
 // }
 
+model User {
+  id     String @id @unique @default(uuid())
+  email  String @unique
+  secret String @unique
+  usage  Int
+}
+
 model Team {
   id         String         @id @unique @default(uuid())
   name       String         @unique
