@@ -8,8 +8,8 @@ const playerRouter = Router();
 
 playerRouter.get("/:team", getPlayers);
 
-playerRouter.get("/player/:playerslug", getPlayerSearch);
+playerRouter.get("/search/:playerslug", getPlayerSearch);
 
-playerRouter.get("/player/id/:playerID", getPlayerById);
+playerRouter.get("/id/:playerID", getPlayerById);
 
 export default playerRouter;
