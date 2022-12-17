@@ -11,7 +11,7 @@
     "lint": "npx eslint . --ext .ts",
     "seed": "npm run update-teams && npm run update-teams-stats && npx ts-node src/scripts/seedPlayers.ts && npm run update-players-stats",
     "update-all": "npm run update-teams && npm run update-teams-stats && npm run update-players-stats",
-    "update-teams": "npx ts-node src/scripts/updateTeamStats.ts",
+    "update-teams": "npx ts-node src/scripts/updateTeams.ts",
     "update-teams-stats": "npx ts-node src/scripts/updateTeamStats.ts",
     "update-players-stats": "npx ts-node src/scripts/updatePlayerStats.ts"
   },

@@ -51,7 +51,7 @@ const getPlayersByPosition = async (req: Request, res: Response) => {
   const { position } = req.params;
   const players = await prisma.player.findMany({
     where: {
-      position: position,
+      position: position.toUpperCase(),
     },
     include: {
       team: true,
@@ -63,8 +63,10 @@ const getPlayersByPosition = async (req: Request, res: Response) => {
     },
   });
 
+  const filterStatless = players.filter((p) => p.stats.length > 0);
+
   res.json({
-    players,
+    players: filterStatless,
   });
 };
 
