@@ -3,6 +3,7 @@ import teamsRouter from "./router/teamRouter.js";
 import playerRouter from "./router/playerRotuer.js";
 import registerRouter from "./router/registerRouter.js";
 import { checkToken } from "./middleware/auth.js";
+import { updateUsage } from "./middleware/updateUsage.js";
 
 const app = express();
 const port = 5000;
@@ -12,8 +13,8 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/register", registerRouter);
 
-app.use("/teams", checkToken, teamsRouter);
+app.use("/teams", checkToken, updateUsage, teamsRouter);
 
-app.use("/players", checkToken, playerRouter);
+app.use("/players", checkToken, updateUsage, playerRouter);
 
 app.listen(port, () => console.log(`📡 server listening on port: ${port}`));

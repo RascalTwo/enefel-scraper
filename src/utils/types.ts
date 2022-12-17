@@ -1,3 +1,5 @@
+import { Request } from "express";
+
 export type RawTeam = {
   team: string;
   profUrl: string;
@@ -75,3 +77,10 @@ type RawTD = {
   returns: string;
   defensive: string;
 };
+export interface IReq extends Request {
+  user?: {
+    id: string;
+    usage: number;
+    access: string;
+  };
+}

@@ -45,6 +45,7 @@ const registerUser = async (req: Request, res: Response) => {
           email: email as string,
           secret: secret,
           usage: 0,
+          access: "user",
         },
       });
 

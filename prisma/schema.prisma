@@ -30,6 +30,7 @@ model User {
   email  String @unique
   secret String @unique
   usage  Int
+  access String
 }
 
 model Team {

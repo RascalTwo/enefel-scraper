@@ -1,10 +1,10 @@
 import prisma from "../utils/db.js";
 import { Request, Response, NextFunction } from "express";
 import { createHash } from "../utils/helpers.js";
-import { userInfo } from "os";
+import { IReq } from "../utils/types.js";
 
 export const checkToken = async (
-  req: Request,
+  req: IReq,
   res: Response,
   next: NextFunction
 ) => {
@@ -31,23 +31,14 @@ export const checkToken = async (
             secret: secret,
           },
           select: {
+            id: true,
             usage: true,
+            access: true,
           },
         });
 
-        if (usr && usr.usage < 4) {
-          await prisma.user.update({
-            where: {
-              secret: secret,
-            },
-            data: {
-              usage: usr?.usage + 1,
-            },
-          });
-        } else {
-          res.status(400).json({
-            error: "Request limit exceeded, ",
-          });
+        if (usr) {
+          req.user = usr;
         }
       } catch (err) {
         res
