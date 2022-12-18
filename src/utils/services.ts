@@ -179,12 +179,12 @@ export const getPlayerStats = async () => {
 
           const playerWS = playerScraper(playerHTML);
           const updatePlayer = playerWS.stats.map((s, i) => {
-            if (player.stats.length > 0 && player.stats[i].id) {
+            if (player?.stats?.length > 0 && player?.stats[i]?.id) {
               return {
                 id:
-                  player.stats && player.stats[i].id
-                    ? player.stats[i].id
-                    : null,
+                  player?.stats && player?.stats[i]?.id
+                    ? player?.stats[i]?.id
+                    : undefined,
                 ...s,
                 stats: s.stats.map((stat, idx) => {
                   if (

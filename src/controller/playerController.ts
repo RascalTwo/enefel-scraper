@@ -46,4 +46,28 @@ const getPlayerSearch = async (req: Request, res: Response) => {
   });
   res.json({ player });
 };
-export { getPlayers, getPlayerById, getPlayerSearch };
+
+const getPlayersByPosition = async (req: Request, res: Response) => {
+  const { position } = req.params;
+  const players = await prisma.player.findMany({
+    where: {
+      position: position.toUpperCase(),
+    },
+    include: {
+      team: true,
+      stats: {
+        include: {
+          performance: true,
+        },
+      },
+    },
+  });
+
+  const filterStatless = players.filter((p) => p.stats.length > 0);
+
+  res.json({
+    players: filterStatless,
+  });
+};
+
+export { getPlayers, getPlayerById, getPlayerSearch, getPlayersByPosition };
