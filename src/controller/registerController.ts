@@ -1,7 +1,12 @@
 import { Request, Response } from "express";
 import crypto from "crypto";
+import handlebars from "handlebars";
 import prisma from "../utils/db.js";
+
 import { createHash } from "../utils/helpers.js";
+import { transporter } from "../utils/nm-transporter.js";
+
+import { emailTemplateSrc } from "../utils/helpers.js";
 
 // const randomString = crypto.randomBytes(32).toString("hex");
 
@@ -18,17 +23,8 @@ const registerUser = async (req: Request, res: Response) => {
     });
   } else {
     /* 
-	  validate email w/ zod
+    validate email w/ zod
     */
-
-    /* 
-	 generate random string and hash that string, save user email & hashedString to db
-	 
-	 dispatch email to provided with random string to attach to requests for comparison
-    */
-    const randomString = crypto.randomBytes(32).toString("hex");
-    const secret = createHash(randomString);
-
     const alreadyUser = await prisma.user.findFirst({
       where: {
         email: email as string,
@@ -40,6 +36,14 @@ const registerUser = async (req: Request, res: Response) => {
         error: "Already in use",
       });
     } else {
+      const randomString = crypto.randomBytes(32).toString("hex");
+      const secret = createHash(randomString);
+      /* 
+     generate random string and hash that string, save user email & hashedString to db
+     
+     dispatch email to provided with random string to attach to requests for comparison
+      */
+
       await prisma.user.create({
         data: {
           email: email as string,
@@ -49,6 +53,23 @@ const registerUser = async (req: Request, res: Response) => {
         },
       });
 
+      const template = handlebars.compile(emailTemplateSrc.toString("utf-8")),
+        htmlToSend = template({ message: "hello world!" });
+
+      const mailOptions = {
+        from: "nm.enefel.app",
+        to: email,
+        subject: "Your EnEfEl API registration key",
+        html: htmlToSend,
+      };
+
+      transporter.sendMail(mailOptions, (err, res) => {
+        if (err) {
+          console.log("ERROR", err);
+        } else {
+          console.log("successfully sent registration email");
+        }
+      });
       res.json({
         randomString,
         message: `Email sent to ${email}`,
