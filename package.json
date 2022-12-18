@@ -25,6 +25,8 @@
     "@types/jsdom": "^20.0.1",
     "@types/jsonwebtoken": "^8.5.9",
     "@types/node": "^18.11.11",
+    "@types/nodemailer": "^6.4.7",
+    "@types/nodemailer-express-handlebars": "^4.0.2",
     "@typescript-eslint/eslint-plugin": "^5.45.1",
     "@typescript-eslint/parser": "^5.45.1",
     "eslint": "^8.29.0",
@@ -44,6 +46,8 @@
     "express": "^4.18.2",
     "jsdom": "^20.0.3",
     "jsonwebtoken": "^8.5.1",
-    "node-fetch": "^3.3.0"
+    "node-fetch": "^3.3.0",
+    "nodemailer": "^6.8.0",
+    "nodemailer-express-handlebars": "^6.0.0"
   }
 }
