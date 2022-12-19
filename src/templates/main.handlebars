@@ -4,8 +4,25 @@
   </head>
   <body>
     <div>
-      <span style="font-weight: bold;">Message: </span>
-      <span>{{message}}</span>
+      <h2>Welcome to <span>EnEfEl.gg</span></h2>
+      <p>Thanks for registering for access to the
+        <span>EnEfEl.gg</span>
+        API, we're excited for you to get building!</p>
+    </div>
+    <div>
+      <span style="font-weight: bold;">Heres your API access key, remember to
+        keep this private and safe:
+      </span>
+      <span class="message">{{message}}</span>
+    </div>
+    <div>
+      <p>If you lose or compromise your credentials you can refresh your token
+        at any time.</p>
+      <a href="#">Refresh credentials</a>
     </div>
   </body>
 </html>
+
+<style>
+  .message{ color: green; }
+</style>
