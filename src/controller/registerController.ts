@@ -54,10 +54,10 @@ const registerUser = async (req: Request, res: Response) => {
       });
 
       const template = handlebars.compile(emailTemplateSrc.toString("utf-8")),
-        htmlToSend = template({ message: "hello world!" });
+        htmlToSend = template({ message: randomString });
 
       const mailOptions = {
-        from: "nm.enefel.app",
+        from: "no-reply@enefel.com",
         to: email,
         subject: "Your EnEfEl API registration key",
         html: htmlToSend,
@@ -67,7 +67,7 @@ const registerUser = async (req: Request, res: Response) => {
         if (err) {
           console.log("ERROR", err);
         } else {
-          console.log("successfully sent registration email");
+          console.log("successfully sent registration email", res);
         }
       });
       res.json({
