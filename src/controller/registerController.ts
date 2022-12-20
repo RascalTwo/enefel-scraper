@@ -27,7 +27,7 @@ const registerUser = async (req: Request, res: Response) => {
     */
     const alreadyUser = await prisma.user.findFirst({
       where: {
-        email: email as string,
+        email: email,
       },
     });
 
@@ -67,7 +67,7 @@ const registerUser = async (req: Request, res: Response) => {
         if (err) {
           console.log("ERROR", err);
         } else {
-          console.log("successfully sent registration email", res);
+          console.log("successfully sent registration email");
         }
       });
       res.json({
