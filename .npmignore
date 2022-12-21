@@ -1,4 +1,4 @@
 templates
 scripts
-src/utils/scrapers.ts
-src/utils/services.ts
+src/utils/scrapers
+src/utils/services
