@@ -4,8 +4,6 @@ import playerRouter from "./router/playerRotuer.js";
 import registerRouter from "./router/registerRouter.js";
 import { checkToken } from "./middleware/auth.js";
 import { updateUsage } from "./middleware/updateUsage.js";
-import { fileURLToPath } from "url";
-import path from "path";
 
 const app = express();
 const port = 5000;
