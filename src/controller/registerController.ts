@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import crypto from "crypto";
-import handlebars from "handlebars";
+import hbs from "hbs";
 import prisma from "../utils/db.js";
 
 import { createHash } from "../utils/helpers.js";
@@ -53,7 +53,9 @@ const registerUser = async (req: Request, res: Response) => {
         },
       });
 
-      const template = handlebars.compile(emailTemplateSrc.toString("utf-8")),
+      const template = hbs.handlebars.compile(
+          emailTemplateSrc.toString("utf-8")
+        ),
         htmlToSend = template({ message: randomString });
 
       const mailOptions = {
