@@ -1,4 +1,3 @@
-templates
-scripts
-src/utils/scrapers
-src/utils/services
+src/templates
+src/scripts
+src/utils
