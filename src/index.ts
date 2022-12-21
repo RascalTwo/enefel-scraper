@@ -13,10 +13,10 @@ const port = 5000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const __filename = fileURLToPath(import.meta.url);
-export const __dirname = path.dirname(__filename);
-app.set("view engine", "hbs");
-app.set("views", __dirname + "/templates");
+// const __filename = fileURLToPath(import.meta.url);
+// export const __dirname = path.dirname(__filename);
+// app.set("view engine", "hbs");
+// app.set("views", __dirname + "/templates");
 
 app.use("/register", registerRouter);
 
@@ -24,11 +24,11 @@ app.use("/teams", checkToken, updateUsage, teamsRouter);
 
 app.use("/players", checkToken, updateUsage, playerRouter);
 
-app.get("/", (req, res) => {
-  res.render("main.hbs", {
-    root: "src/templates",
-    message: "THIS IS THE MESSAGE",
-  });
-});
+// app.get("/", (req, res) => {
+//   res.render("main.hbs", {
+//     root: "src/templates",
+//     message: "THIS IS THE MESSAGE",
+//   });
+// });
 
 app.listen(port, () => console.log(`📡 server listening on port: ${port}`));
