@@ -1,156 +1,183 @@
 -- CreateTable
+CREATE TABLE "Widget" (
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+
+    CONSTRAINT "Widget_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "User" (
+    "id" STRING NOT NULL,
+    "email" STRING NOT NULL,
+    "secret" STRING NOT NULL,
+    "usage" INT4 NOT NULL,
+    "access" STRING NOT NULL,
+
+    CONSTRAINT "User_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "Team" (
-    "id" TEXT NOT NULL,
-    "name" TEXT NOT NULL,
-    "icon" TEXT NOT NULL,
-    "city" TEXT NOT NULL,
-    "conference" TEXT NOT NULL,
-    "division" TEXT NOT NULL,
-    "urlSlug" TEXT NOT NULL,
+    "id" STRING NOT NULL,
+    "name" STRING NOT NULL,
+    "icon" STRING NOT NULL,
+    "city" STRING NOT NULL,
+    "conference" STRING NOT NULL,
+    "division" STRING NOT NULL,
+    "urlSlug" STRING NOT NULL,
 
     CONSTRAINT "Team_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "TeamDetails" (
-    "id" TEXT NOT NULL,
-    "rank" TEXT NOT NULL,
-    "wins" TEXT NOT NULL,
-    "losses" TEXT NOT NULL,
-    "ties" TEXT NOT NULL,
-    "coach" TEXT NOT NULL,
-    "stadium" TEXT NOT NULL,
-    "team_id" TEXT NOT NULL,
+    "id" STRING NOT NULL,
+    "rank" STRING NOT NULL,
+    "wins" STRING NOT NULL,
+    "losses" STRING NOT NULL,
+    "ties" STRING NOT NULL,
+    "coach" STRING NOT NULL,
+    "stadium" STRING NOT NULL,
+    "team_id" STRING NOT NULL,
 
     CONSTRAINT "TeamDetails_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "TeamStat" (
-    "id" TEXT NOT NULL,
-    "sacks" TEXT NOT NULL,
-    "turnover_ratio" TEXT NOT NULL,
-    "team_id" TEXT NOT NULL,
+    "id" STRING NOT NULL,
+    "sacks" STRING NOT NULL,
+    "turnover_ratio" STRING NOT NULL,
+    "team_id" STRING NOT NULL,
 
     CONSTRAINT "TeamStat_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "TeamTouchDown" (
-    "id" TEXT NOT NULL,
-    "total" TEXT NOT NULL,
-    "rushing" TEXT NOT NULL,
-    "passing" TEXT NOT NULL,
-    "returns" TEXT NOT NULL,
-    "defensive" TEXT NOT NULL,
-    "team_stat_id" TEXT NOT NULL,
+    "id" STRING NOT NULL,
+    "total" STRING NOT NULL,
+    "rushing" STRING NOT NULL,
+    "passing" STRING NOT NULL,
+    "returns" STRING NOT NULL,
+    "defensive" STRING NOT NULL,
+    "team_stat_id" STRING NOT NULL,
 
     CONSTRAINT "TeamTouchDown_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "TeamFieldGoal" (
-    "id" TEXT NOT NULL,
-    "successful" TEXT NOT NULL,
-    "attempts" TEXT NOT NULL,
-    "team_stat_id" TEXT NOT NULL,
+    "id" STRING NOT NULL,
+    "successful" STRING NOT NULL,
+    "attempts" STRING NOT NULL,
+    "team_stat_id" STRING NOT NULL,
 
     CONSTRAINT "TeamFieldGoal_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "TeamOffense" (
-    "id" TEXT NOT NULL,
-    "general_total_yards" TEXT NOT NULL,
-    "general_plays" TEXT NOT NULL,
-    "general_average_yards" TEXT NOT NULL,
-    "rushing_total_yards" TEXT NOT NULL,
-    "rushing_plays" TEXT NOT NULL,
-    "rushing_average_yards" TEXT NOT NULL,
-    "passing_completions" TEXT NOT NULL,
-    "passing_attempts" TEXT NOT NULL,
-    "passing_interceptions" TEXT NOT NULL,
-    "passing_average_yards" TEXT NOT NULL,
-    "team_stat_id" TEXT NOT NULL,
+    "id" STRING NOT NULL,
+    "general_total_yards" STRING NOT NULL,
+    "general_plays" STRING NOT NULL,
+    "general_average_yards" STRING NOT NULL,
+    "rushing_total_yards" STRING NOT NULL,
+    "rushing_plays" STRING NOT NULL,
+    "rushing_average_yards" STRING NOT NULL,
+    "passing_completions" STRING NOT NULL,
+    "passing_attempts" STRING NOT NULL,
+    "passing_interceptions" STRING NOT NULL,
+    "passing_average_yards" STRING NOT NULL,
+    "team_stat_id" STRING NOT NULL,
 
     CONSTRAINT "TeamOffense_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "TeamFirstDown" (
-    "id" TEXT NOT NULL,
-    "total_first_downs" TEXT NOT NULL,
-    "rushing" TEXT NOT NULL,
-    "passing" TEXT NOT NULL,
-    "penalty" TEXT NOT NULL,
-    "team_stat_id" TEXT NOT NULL,
+    "id" STRING NOT NULL,
+    "total_first_downs" STRING NOT NULL,
+    "rushing" STRING NOT NULL,
+    "passing" STRING NOT NULL,
+    "penalty" STRING NOT NULL,
+    "team_stat_id" STRING NOT NULL,
 
     CONSTRAINT "TeamFirstDown_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "TeamDownConversion" (
-    "id" TEXT NOT NULL,
-    "down" TEXT NOT NULL,
-    "successful" TEXT NOT NULL,
-    "attempts" TEXT NOT NULL,
-    "team_stat_id" TEXT NOT NULL,
+    "id" STRING NOT NULL,
+    "down" STRING NOT NULL,
+    "successful" STRING NOT NULL,
+    "attempts" STRING NOT NULL,
+    "team_stat_id" STRING NOT NULL,
 
     CONSTRAINT "TeamDownConversion_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "ScheduleGame" (
-    "id" TEXT NOT NULL,
-    "gameUrl" TEXT NOT NULL,
-    "date" TEXT NOT NULL,
-    "opponent" TEXT NOT NULL,
-    "homeOrAway" TEXT NOT NULL,
-    "outcome" TEXT NOT NULL,
-    "score" TEXT NOT NULL,
-    "team_id" TEXT NOT NULL,
+    "id" STRING NOT NULL,
+    "gameUrl" STRING NOT NULL,
+    "date" STRING NOT NULL,
+    "opponent" STRING NOT NULL,
+    "homeOrAway" STRING NOT NULL,
+    "outcome" STRING NOT NULL,
+    "score" STRING NOT NULL,
+    "team_id" STRING NOT NULL,
 
     CONSTRAINT "ScheduleGame_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "Player" (
-    "id" TEXT NOT NULL,
-    "slugUrl" TEXT,
-    "headshot" TEXT,
-    "name" TEXT NOT NULL,
-    "number" TEXT,
-    "position" TEXT,
-    "height" TEXT NOT NULL,
-    "weight" TEXT NOT NULL,
-    "experience" TEXT,
-    "college" TEXT,
-    "status" TEXT,
-    "team_id" TEXT NOT NULL,
+    "id" STRING NOT NULL,
+    "slugUrl" STRING,
+    "headshot" STRING,
+    "name" STRING NOT NULL,
+    "number" STRING,
+    "position" STRING,
+    "height" STRING NOT NULL,
+    "weight" STRING NOT NULL,
+    "experience" STRING,
+    "college" STRING,
+    "status" STRING,
+    "team_id" STRING NOT NULL,
 
     CONSTRAINT "Player_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "PlayerStat" (
-    "id" TEXT NOT NULL,
-    "week" TEXT NOT NULL,
-    "opponent" TEXT NOT NULL,
-    "result" TEXT NOT NULL,
-    "player_id" TEXT NOT NULL,
+    "id" STRING NOT NULL,
+    "week" STRING NOT NULL,
+    "opponent" STRING NOT NULL,
+    "result" STRING NOT NULL,
+    "player_id" STRING NOT NULL,
 
     CONSTRAINT "PlayerStat_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "PlayerPerformance" (
-    "id" TEXT NOT NULL,
-    "title" TEXT NOT NULL,
-    "stat" TEXT NOT NULL,
-    "player_stat_id" TEXT NOT NULL,
+    "id" STRING NOT NULL,
+    "title" STRING NOT NULL,
+    "stat" STRING NOT NULL,
+    "player_stat_id" STRING NOT NULL,
 
     CONSTRAINT "PlayerPerformance_pkey" PRIMARY KEY ("id")
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_id_key" ON "User"("id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_secret_key" ON "User"("secret");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Team_id_key" ON "Team"("id");
