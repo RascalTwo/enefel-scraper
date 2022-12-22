@@ -24,7 +24,7 @@
     "allowJs": true,
     "resolveJsonModule": true,
     "esModuleInterop": true,
-    "outDir": "./build",
+    "outDir": "./dist",
     "rootDir": "src"
   }
 }
