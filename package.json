@@ -7,9 +7,10 @@
   "scripts": {
     "dev": "nodemon src/index.ts",
     "build": "rm -rf dist && tsc",
-    "postbuild": "npm run copy-views && npm run copy-json && npm ci",
+    "postbuild": "npm run copy-views && npm run copy-json && npm run copy-lock && cd dist && npm ci",
     "copy-views": "cp -r ./src/views/ ./dist",
     "copy-json": "cp ./package.json ./dist",
+    "copy-lock": "cp ./package-lock.json ./dist",
     "dev-start": "node dist/index.js",
     "start": "node index.js",
     "lint": "npx eslint . --ext .ts",
