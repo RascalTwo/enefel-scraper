@@ -14,5 +14,5 @@ const __filename = fileURLToPath(import.meta.url);
 export const __dirname = path.dirname(__filename);
 
 export const emailTemplateSrc = fs.readFileSync(
-  path.join(__dirname, "../templates/main.hbs")
+  path.join(__dirname, "../views/main.hbs")
 );
