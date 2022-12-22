@@ -1,11 +1,20 @@
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 import prisma from "../utils/db.js";
 import { createHash } from "../utils/helpers.js";
-export const checkToken = async (req, res, next) => {
+export const checkToken = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const token = req.header("Authorization");
     if (!token) {
         res.status(400).json({ error: "Not authorized to view this resource" });
     }
-    const tokenTuple = token?.split(" ");
+    const tokenTuple = token === null || token === void 0 ? void 0 : token.split(" ");
     if (tokenTuple && (tokenTuple[0] !== "Bearer" || !tokenTuple[1])) {
         res.status(400).json({
             error: "Invalid authorization, access to resource not granted",
@@ -16,7 +25,7 @@ export const checkToken = async (req, res, next) => {
         if (isValid) {
             try {
                 const secret = createHash(tokenTuple[1]);
-                const usr = await prisma.user.findFirst({
+                const usr = yield prisma.user.findFirst({
                     where: {
                         secret: secret,
                     },
@@ -41,7 +50,7 @@ export const checkToken = async (req, res, next) => {
             res.status(400).json({ error: "Not authorized to view this resource" });
         }
     }
-};
+});
 const validateToken = (token) => {
     if (token === undefined) {
         return false;

@@ -1,15 +1,25 @@
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 import { getTeamStats } from "../utils/services.js";
 import { logger } from "../utils/logger.js";
 import prisma from "../utils/db.js";
-const updateTeamsStats = async () => {
-    const withStats = await getTeamStats();
+const updateTeamsStats = () => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b;
+    const withStats = yield getTeamStats();
     while (withStats.length >= 1) {
         try {
             const team = withStats.pop();
-            if (team?.stats) {
+            if (team === null || team === void 0 ? void 0 : team.stats) {
                 logger.start(team.urlSlug);
-                const updateStats = await prisma.team.update({
-                    where: { id: team?.id },
+                const updateStats = yield prisma.team.update({
+                    where: { id: team === null || team === void 0 ? void 0 : team.id },
                     data: {
                         stats: {
                             upsert: {
@@ -18,8 +28,8 @@ const updateTeamsStats = async () => {
                                         upsert: {
                                             update: {
                                                 total_first_downs: team.stats.first_downs.total_first_downs,
-                                                rushing: team.stats.first_downs?.rushing,
-                                                passing: team.stats.first_downs?.passing,
+                                                rushing: (_a = team.stats.first_downs) === null || _a === void 0 ? void 0 : _a.rushing,
+                                                passing: (_b = team.stats.first_downs) === null || _b === void 0 ? void 0 : _b.passing,
                                                 penalty: team.stats.first_downs.penalty,
                                             },
                                             create: {
@@ -32,7 +42,7 @@ const updateTeamsStats = async () => {
                                         },
                                     },
                                     down_conversions: {
-                                        upsert: team?.stats.down_conversions.map((dc) => ({
+                                        upsert: team === null || team === void 0 ? void 0 : team.stats.down_conversions.map((dc) => ({
                                             create: {
                                                 down: dc.down,
                                                 successful: dc.successful,
@@ -96,7 +106,7 @@ const updateTeamsStats = async () => {
                                             },
                                         },
                                     },
-                                    sacks: team?.stats.sacks,
+                                    sacks: team === null || team === void 0 ? void 0 : team.stats.sacks,
                                     field_goals: {
                                         upsert: {
                                             update: {
@@ -140,7 +150,7 @@ const updateTeamsStats = async () => {
                                         },
                                     },
                                     down_conversions: {
-                                        create: team?.stats.down_conversions.map((dc) => ({
+                                        create: team === null || team === void 0 ? void 0 : team.stats.down_conversions.map((dc) => ({
                                             down: dc.down,
                                             successful: dc.successful,
                                             attempts: dc.attempts,
@@ -168,11 +178,11 @@ const updateTeamsStats = async () => {
                                                 .passing_average_yards,
                                         },
                                     },
-                                    sacks: team?.stats.sacks,
+                                    sacks: team === null || team === void 0 ? void 0 : team.stats.sacks,
                                     field_goals: {
                                         create: {
-                                            successful: team?.stats.field_goals.successful,
-                                            attempts: team?.stats.field_goals.attempts,
+                                            successful: team === null || team === void 0 ? void 0 : team.stats.field_goals.successful,
+                                            attempts: team === null || team === void 0 ? void 0 : team.stats.field_goals.attempts,
                                         },
                                     },
                                     touch_downs: {
@@ -197,5 +207,5 @@ const updateTeamsStats = async () => {
             logger.error(err.message);
         }
     }
-};
+});
 updateTeamsStats();

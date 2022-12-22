@@ -17,10 +17,14 @@
   "include": ["./src/**/*"],
   "exclude": ["node_modules", "**/*.spec.ts"],
   "compilerOptions": {
-    "rootDir": "./src",
-    "outDir": "./dist",
-    "module": "esnext",
-    "moduleResolution": "node"
-    // typescript options here
+    "skipLibCheck": true,
+    "target": "es6",
+    "module": "ES2022",
+    "moduleResolution": "node",
+    "allowJs": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "outDir": "./build",
+    "rootDir": "src"
   }
 }

@@ -1,3 +1,12 @@
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 import crypto from "crypto";
 import hbs from "hbs";
 import prisma from "../utils/db.js";
@@ -9,7 +18,7 @@ import { emailTemplateSrc } from "../utils/helpers.js";
 //   .createHash("sha256")
 //   .update(randomString)
 //   .digest("hex");
-const registerUser = async (req, res) => {
+const registerUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email } = req.body;
     if (!email) {
         res.status(400).json({
@@ -20,7 +29,7 @@ const registerUser = async (req, res) => {
         /*
         validate email w/ zod
         */
-        const alreadyUser = await prisma.user.findFirst({
+        const alreadyUser = yield prisma.user.findFirst({
             where: {
                 email: email,
             },
@@ -38,7 +47,7 @@ const registerUser = async (req, res) => {
            
            dispatch email to provided with random string to attach to requests for comparison
             */
-            await prisma.user.create({
+            yield prisma.user.create({
                 data: {
                     email: email,
                     secret: secret,
@@ -67,5 +76,5 @@ const registerUser = async (req, res) => {
             });
         }
     }
-};
+});
 export { registerUser };
