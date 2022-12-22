@@ -19,7 +19,7 @@
   "compilerOptions": {
     "rootDir": "./src",
     "outDir": "./dist",
-    "module": "ES2022",
+    "module": "esnext",
     "moduleResolution": "node"
     // typescript options here
   }
