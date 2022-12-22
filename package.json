@@ -6,8 +6,10 @@
   "main": "./dist/index.js",
   "scripts": {
     "dev": "nodemon src/index.ts",
-    "build": "rm -rf dist && tsc && npm run copy-views",
+    "build": "rm -rf dist && tsc",
+    "postbuild": "npm run copy-views && npm run copy-json",
     "copy-views": "cp -r ./src/views/ ./dist",
+    "copy-json": "cp ./package.json ./dist",
     "start": "node dist/index.js",
     "lint": "npx eslint . --ext .ts",
     "seed": "npm run update-teams && npm run update-teams-stats && npx ts-node src/scripts/seedPlayers.ts && npm run update-players-stats",
